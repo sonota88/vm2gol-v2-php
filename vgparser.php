@@ -365,7 +365,7 @@ function parse_call() {
     global $pos;
     puts_fn("parse_call");
 
-    consume_kw("call");
+    # consume_kw("call");
 
     $funcall = parse_funcall();
 
@@ -518,7 +518,7 @@ function parse_stmt() {
     }
 
     # if     ($t->str_eq("set"     )) { return parse_set();        }
-    if     ($t->str_eq("call"    )) { return parse_call();       }
+    # if     ($t->str_eq("call"    )) { return parse_call();       }
     # elseif ($t->str_eq("call_set")) { return parse_call_set();   }
     elseif ($t->str_eq("return"  )) { return parse_return();     }
     elseif ($t->str_eq("while"   )) { return parse_while();      }
@@ -526,7 +526,7 @@ function parse_stmt() {
     elseif ($t->str_eq("_cmt"    )) { return parse_vm_comment(); }
     else {
         if (
-            $t->kind_eq("ident")
+               $t->kind_eq("ident")
             && peek(1)->is("sym", "=")
         ) {
             if (
@@ -537,6 +537,11 @@ function parse_stmt() {
             } else {
                 return parse_set();
             }
+        } elseif (
+               $t->kind_eq("ident")
+            && peek(1)->is("sym", "(")
+        ) {
+            return parse_call();
         } else {
             throw not_yet_impl($t);
         }

@@ -11,5 +11,5 @@ func sub(a) {
 }
 
 func main() {
-  call sub(1);
+  sub(1);
 }
