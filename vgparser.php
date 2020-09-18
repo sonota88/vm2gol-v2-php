@@ -529,7 +529,11 @@ function parse_stmt() {
             $t->kind_eq("ident")
             && peek(1)->is("sym", "=")
         ) {
-            return parse_set();
+            if (peek(4)->is("sym", "(")) {
+                throw not_yet_impl($t);
+            } else {
+                return parse_set();
+            }
         } else {
             throw not_yet_impl($t);
         }
