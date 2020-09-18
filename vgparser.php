@@ -324,7 +324,7 @@ function parse_set() {
     global $pos;
     puts_fn("parse_set");
 
-    consume_kw("set");
+    # consume_kw("set");
 
     $t = peek(0);
     $pos++;
@@ -517,15 +517,22 @@ function parse_stmt() {
         return -1;
     }
 
-    if     ($t->str_eq("set"     )) { return parse_set();        }
-    elseif ($t->str_eq("call"    )) { return parse_call();       }
+    # if     ($t->str_eq("set"     )) { return parse_set();        }
+    if     ($t->str_eq("call"    )) { return parse_call();       }
     elseif ($t->str_eq("call_set")) { return parse_call_set();   }
     elseif ($t->str_eq("return"  )) { return parse_return();     }
     elseif ($t->str_eq("while"   )) { return parse_while();      }
     elseif ($t->str_eq("case"    )) { return parse_case();       }
     elseif ($t->str_eq("_cmt"    )) { return parse_vm_comment(); }
     else {
-        throw not_yet_impl($t);
+        if (
+            $t->kind_eq("ident")
+            && peek(1)->is("sym", "=")
+        ) {
+            return parse_set();
+        } else {
+            throw not_yet_impl($t);
+        }
     }
 }
 

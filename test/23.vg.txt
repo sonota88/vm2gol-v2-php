@@ -3,11 +3,11 @@
 func sub(a) {
   // 関数の引数をローカル変数に代入
   var b;
-  set b = a;
+  b = a;
 
   // ローカル変数をローカル変数に代入
   var c;
-  set c = b;
+  c = b;
 }
 
 func main() {

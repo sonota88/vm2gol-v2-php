@@ -2,5 +2,5 @@
 
 func main() {
   var a;
-  set a = vram[0];
+  a = vram[0];
 }
