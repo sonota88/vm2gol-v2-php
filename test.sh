@@ -34,7 +34,7 @@ run_tokenize() {
 run_parse() {
   local infile="$1"; shift
 
-  cat $infile | php vgparser.php
+  cat $infile | php parser.php
 }
 
 run_cg() {
