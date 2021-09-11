@@ -28,7 +28,7 @@ run_test_json() {
 run_tokenize() {
   local infile="$1"; shift
 
-  cat $infile | php vgtokenizer.php
+  cat $infile | php lexer.php
 }
 
 run_parse() {
