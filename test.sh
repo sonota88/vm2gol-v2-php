@@ -40,7 +40,7 @@ run_parse() {
 run_cg() {
   local infile="$1"; shift
 
-  cat $infile | php vgcg.php
+  cat $infile | php codegen.php
 }
 
 # --------------------------------
