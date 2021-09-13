@@ -250,12 +250,22 @@ function codegen_set($fn_arg_names, $lvar_names, $rest) {
                     printf("  get_vram %s reg_a\n", $vram_arg);
                 } else {
 
-                    $vram_ref = to_asm_arg($fn_arg_names, $lvar_names, $vram_arg);
-                    if ($vram_ref !== null) {
-                        printf("  get_vram %s reg_a\n", $vram_ref);
+                    if (is_int($vram_arg)) {
+                        $vram_ref = $vram_arg;
+                    } elseif (is_string($vram_arg)) {
+                        $str = $vram_arg;
+                        if (0 <= arr_index($fn_arg_names, $str)) {
+                            $vram_ref = to_fn_arg_ref($fn_arg_names, $str);
+                        } elseif (0 <= arr_index($lvar_names, $str)) {
+                            $vram_ref = to_lvar_ref($lvar_names, $str);
+                        } else {
+                            throw not_yet_impl($expr);
+                        }
                     } else {
                         throw not_yet_impl($expr);
                     }
+
+                    printf("  get_vram %s reg_a\n", $vram_ref);
 
                 }
                 $arg_src = "reg_a";
