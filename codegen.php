@@ -235,12 +235,15 @@ function codegen_set($fn_arg_names, $lvar_names, $rest) {
     $dest = $rest[0];
     $expr = $rest[1];
 
-    $arg_src = to_asm_arg($fn_arg_names, $lvar_names, $expr);
-    if ($arg_src === null) {
-        if (is_array($expr)) {
-            codegen_expr($fn_arg_names, $lvar_names, $expr);
-            $arg_src = "reg_a";
-        } elseif (is_string($expr)) {
+    if (is_int($expr)) {
+        $arg_src = $expr;
+    } elseif (is_string($expr)) {
+        $str = $expr;
+        if (0 <= arr_index($fn_arg_names, $str)) {
+            $arg_src = to_fn_arg_ref($fn_arg_names, $str);
+        } elseif (0 <= arr_index($lvar_names, $str)) {
+            $arg_src = to_lvar_ref($lvar_names, $str);
+        } else {
             if (preg_match("/^vram\[(.+?)\]/", $expr, $m)) {
                 $vram_arg = $m[1];
                 if (preg_match("/^[0-9]+$/", $vram_arg)) {
@@ -253,15 +256,18 @@ function codegen_set($fn_arg_names, $lvar_names, $rest) {
                     } else {
                         throw not_yet_impl($expr);
                     }
-                    
+
                 }
                 $arg_src = "reg_a";
             } else {
                 throw not_yet_impl($expr);
             }
-        } else {
-            throw not_yet_impl($expr);
         }
+    } elseif (is_array($expr)) {
+        codegen_expr($fn_arg_names, $lvar_names, $expr);
+        $arg_src = "reg_a";
+    } else {
+        throw not_yet_impl($expr);
     }
 
     $arg_dest = to_asm_arg($fn_arg_names, $lvar_names, $dest);
