@@ -280,11 +280,18 @@ function codegen_set($fn_arg_names, $lvar_names, $rest) {
         throw not_yet_impl($expr);
     }
 
-    $arg_dest = to_asm_arg($fn_arg_names, $lvar_names, $dest);
-    if ($arg_dest !== null) {
+    if (is_int($dest)) {
+        $arg_dest = $dest;
         printf("  cp ${arg_src} ${arg_dest}\n");
-    } else {
-        if (is_string($dest)) {
+    } elseif (is_string($dest)) {
+        $str = $dest;
+        if (0 <= arr_index($fn_arg_names, $str)) {
+            $arg_dest = to_fn_arg_ref($fn_arg_names, $str);
+            printf("  cp ${arg_src} ${arg_dest}\n");
+        } elseif (0 <= arr_index($lvar_names, $str)) {
+            $arg_dest = to_lvar_ref($lvar_names, $str);
+            printf("  cp ${arg_src} ${arg_dest}\n");
+        } else {
 
             if (preg_match("/^vram\[(.+?)\]/", $dest, $m)) {
                 $vram_arg = $m[1];
@@ -304,9 +311,9 @@ function codegen_set($fn_arg_names, $lvar_names, $rest) {
                 throw not_yet_impl($dest);
             }
 
-        } else {
-            throw not_yet_impl($dest);
         }
+    } else {
+        throw not_yet_impl($dest);
     }
 }
 
