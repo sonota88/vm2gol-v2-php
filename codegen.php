@@ -348,12 +348,22 @@ function codegen_return($lvar_names, $stmt_rest) {
                 if (preg_match("/^[0-9]+$/", $vram_arg)) {
                     throw not_yet_impl($retval);
                 } else {
-                    $vram_ref = to_asm_arg([], $lvar_names, $vram_arg);
-                    if ($vram_ref !== null) {
-                        printf("  get_vram %s reg_a\n", $vram_ref);
+
+                    if (is_int($vram_arg)) {
+                        $vram_ref = $vram_arg;
+                    } elseif (is_string($vram_arg)) {
+                        $str = $vram_arg;
+                        if (0 <= arr_index($lvar_names, $str)) {
+                            $vram_ref = to_lvar_ref($lvar_names, $str);
+                        } else {
+                            throw not_yet_impl($retval);
+                        }
                     } else {
                         throw not_yet_impl($retval);
                     }
+
+                    printf("  get_vram %s reg_a\n", $vram_ref);
+
                 }
             } else {
                 throw not_yet_impl($retval);
