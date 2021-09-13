@@ -48,7 +48,7 @@ function to_lvar_ref($names, $name) {
     if ($i === -1) {
         throw new Exception("lvar not found");
     }
-    return "[bp-" . ($i + 1) . "]";
+    return "[bp:-" . ($i + 1) . "]";
 }
 
 function to_asm_arg($fn_arg_names, $lvar_names, $val) {

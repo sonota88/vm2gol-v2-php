@@ -4,9 +4,9 @@ label sub
   push bp
   cp sp bp
   sub_sp 1
-  cp [bp:2] [bp-1]
+  cp [bp:2] [bp:-1]
   sub_sp 1
-  cp [bp-1] [bp-2]
+  cp [bp:-1] [bp:-2]
   cp bp sp
   pop bp
   ret
