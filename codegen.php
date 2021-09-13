@@ -59,7 +59,7 @@ function codegen_var($fn_arg_names, $lvar_names, $stmt_rest) {
     }
 }
 
-function codegen_expr_push($fn_arg_names, $lvar_names, $val) {
+function _codegen_expr_push($fn_arg_names, $lvar_names, $val) {
     if (is_int($val)) {
         $push_arg = $val;
     } elseif (is_string($val)) {
@@ -140,8 +140,8 @@ function _codegen_expr_binary($fn_arg_names, $lvar_names, $expr) {
     $term_l = $args[0];
     $term_r = $args[1];
 
-    codegen_expr_push($fn_arg_names, $lvar_names, $term_l);
-    codegen_expr_push($fn_arg_names, $lvar_names, $term_r);
+    _codegen_expr_push($fn_arg_names, $lvar_names, $term_l);
+    _codegen_expr_push($fn_arg_names, $lvar_names, $term_r);
 
     if ($op === "+") {
         codegen_expr_add();
