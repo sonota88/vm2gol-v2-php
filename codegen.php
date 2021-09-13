@@ -299,9 +299,20 @@ function codegen_set($fn_arg_names, $lvar_names, $rest) {
                     printf("  set_vram %s %s\n", $vram_arg, $arg_src);
                 } else {
 
-                    $vram_ref = to_asm_arg($fn_arg_names, $lvar_names, $vram_arg);
-                    if ($vram_ref !== null) {
+                    if (is_int($vram_arg)) {
+                        $vram_ref = $vram_arg;
                         printf("  set_vram %s %s\n", $vram_ref, $arg_src);
+                    } elseif (is_string($vram_arg)) {
+                        $str = $vram_arg;
+                        if (0 <= arr_index($fn_arg_names, $str)) {
+                            $vram_ref = to_fn_arg_ref($fn_arg_names, $str);
+                            printf("  set_vram %s %s\n", $vram_ref, $arg_src);
+                        } elseif (0 <= arr_index($lvar_names, $str)) {
+                            $vram_ref = to_lvar_ref($lvar_names, $str);
+                            printf("  set_vram %s %s\n", $vram_ref, $arg_src);
+                        } else {
+                            throw not_yet_impl($dest);
+                        }
                     } else {
                         throw not_yet_impl($dest);
                     }
