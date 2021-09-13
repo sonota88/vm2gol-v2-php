@@ -81,9 +81,9 @@ test_json_nn() {
   echo "case ${nn}"
 
   local temp_json_file="${TEMP_DIR}/test.json"
-  local exp_tokens_file="${TEST_DIR}/json_${nn}.json"
+  local exp_tokens_file="${TEST_DIR}/json/${nn}.json"
 
-  run_test_json ${TEST_DIR}/json_${nn}.json \
+  run_test_json ${TEST_DIR}/json/${nn}.json \
     > $temp_json_file
   if [ $? -ne 0 ]; then
     ERRS="${ERRS},${nn}_json"
