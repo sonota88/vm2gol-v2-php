@@ -151,10 +151,10 @@ test_parse_nn() {
   local temp_tokens_file="${TEMP_DIR}/test.tokens.txt"
   local temp_vgt_file="${TEMP_DIR}/test.vgt.json"
   local local_errs=""
-  local exp_vgt_file="${TEST_DIR}/parse_exp_${nn}.vgt.json"
+  local exp_vgt_file="${TEST_DIR}/parse/exp_${nn}.vgt.json"
 
   echo "  tokenize" >&2
-  run_tokenize ${TEST_DIR}/parse_${nn}.vg.txt \
+  run_tokenize ${TEST_DIR}/parse/${nn}.vg.txt \
     > $temp_tokens_file
   if [ $? -ne 0 ]; then
     ERRS="${ERRS},${nn}_tokenize"
