@@ -331,13 +331,17 @@ function codegen_set($fn_arg_names, $lvar_names, $rest) {
 function codegen_return($lvar_names, $stmt_rest) {
     $retval = head($stmt_rest);
 
-    $arg_retval = to_asm_arg([], $lvar_names, $retval);
-    if ($arg_retval !== null) {
+    if (is_int($retval)) {
+        $arg_retval = $retval;
         printf("  cp %s reg_a\n", $arg_retval);
-    } else {
+    } elseif (is_string($retval)) {
+        $str = $retval;
 
-        if (is_string($retval)) {
-            $str = $retval;
+        if (0 <= arr_index($lvar_names, $str)) {
+            $arg_retval = to_lvar_ref($lvar_names, $str);
+            printf("  cp %s reg_a\n", $arg_retval);
+        } else {
+
             if (preg_match("/^vram\[(.+?)\]/", $str, $m)) {
                 $vram_arg = $m[1];
 
@@ -354,10 +358,11 @@ function codegen_return($lvar_names, $stmt_rest) {
             } else {
                 throw not_yet_impl($retval);
             }
-        } else {
-            throw not_yet_impl($retval);
+
         }
 
+    } else {
+        throw not_yet_impl($retval);
     }
 }
 
