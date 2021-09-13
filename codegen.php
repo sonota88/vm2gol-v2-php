@@ -40,7 +40,7 @@ function to_fn_arg_ref($names, $name) {
     if ($i === -1) {
         throw new Exception("fn arg not found");
     }
-    return "[bp+" . ($i + 2) . "]";
+    return "[bp:" . ($i + 2) . "]";
 }
 
 function to_lvar_ref($names, $name) {
