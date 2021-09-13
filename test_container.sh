@@ -203,10 +203,10 @@ test_compile_nn() {
   local temp_vgt_file="${TEMP_DIR}/test.vgt.json"
   local temp_vga_file="${TEMP_DIR}/test.vga.txt"
   local local_errs=""
-  local exp_vga_file="${TEST_DIR}/exp_${nn}.vga.txt"
+  local exp_vga_file="${TEST_DIR}/compile/exp_${nn}.vga.txt"
 
   echo "  tokenize" >&2
-  run_tokenize ${TEST_DIR}/${nn}.vg.txt \
+  run_tokenize ${TEST_DIR}/compile/${nn}.vg.txt \
     > $temp_tokens_file
   if [ $? -ne 0 ]; then
     ERRS="${ERRS},${nn}_tokenize"
