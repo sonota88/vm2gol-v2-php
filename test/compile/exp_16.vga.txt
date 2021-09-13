@@ -4,8 +4,10 @@ label main
   push bp
   cp sp bp
   sub_sp 1
-  push 2
-  push 3
+  cp 2 reg_a
+  push reg_a
+  cp 3 reg_a
+  push reg_a
   pop reg_b
   pop reg_a
   add_ab
