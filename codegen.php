@@ -72,7 +72,7 @@ function codegen_expr_push($fn_arg_names, $lvar_names, $val) {
             throw not_yet_impl($val);
         }
     } elseif (is_array($val)) {
-        codegen_expr($fn_arg_names, $lvar_names, $val);
+        _codegen_expr_binary($fn_arg_names, $lvar_names, $val);
         $push_arg = "reg_a";
     } else {
         throw not_yet_impl($val);
@@ -133,7 +133,7 @@ function codegen_expr_neq() {
     printf("label %s\n", $end_label);
 }
 
-function codegen_expr($fn_arg_names, $lvar_names, $expr) {
+function _codegen_expr_binary($fn_arg_names, $lvar_names, $expr) {
     $op   = head($expr);
     $args = rest($expr);
 
@@ -255,7 +255,7 @@ function codegen_set($fn_arg_names, $lvar_names, $rest) {
             }
         }
     } elseif (is_array($expr)) {
-        codegen_expr($fn_arg_names, $lvar_names, $expr);
+        _codegen_expr_binary($fn_arg_names, $lvar_names, $expr);
         $arg_src = "reg_a";
     } else {
         throw not_yet_impl($expr);
@@ -378,7 +378,7 @@ function codegen_while($fn_arg_names, $lvar_names, $stmt_rest) {
 
     printf("label %s\n", $label_begin);
 
-    codegen_expr($fn_arg_names, $lvar_names, $cond_expr);
+    _codegen_expr_binary($fn_arg_names, $lvar_names, $cond_expr);
 
     printf("  set_reg_b 1\n");
     printf("  compare\n");
@@ -421,7 +421,7 @@ function codegen_case($fn_arg_names, $lvar_names, $when_blocks) {
 
         if ($cond_head === "eq") {
             printf("  # -->> expr\n");
-            codegen_expr($fn_arg_names, $lvar_names, $cond);
+            _codegen_expr_binary($fn_arg_names, $lvar_names, $cond);
             printf("  # <<-- expr\n");
 
             printf("  set_reg_b 1\n");
