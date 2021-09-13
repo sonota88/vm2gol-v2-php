@@ -79,14 +79,22 @@ function codegen_var($fn_arg_names, $lvar_names, $stmt_rest) {
 }
 
 function codegen_expr_push($fn_arg_names, $lvar_names, $val) {
-    $push_arg = to_asm_arg($fn_arg_names, $lvar_names, $val);
-    if ($push_arg === null) {
-        if (is_array($val)) {
-            codegen_expr($fn_arg_names, $lvar_names, $val);
-            $push_arg = "reg_a";
+    if (is_int($val)) {
+        $push_arg = $val;
+    } elseif (is_string($val)) {
+        $str = $val;
+        if (0 <= arr_index($fn_arg_names, $str)) {
+            $push_arg = to_fn_arg_ref($fn_arg_names, $str);
+        } elseif (0 <= arr_index($lvar_names, $str)) {
+            $push_arg = to_lvar_ref($lvar_names, $str);
         } else {
             throw not_yet_impl($val);
         }
+    } elseif (is_array($val)) {
+        codegen_expr($fn_arg_names, $lvar_names, $val);
+        $push_arg = "reg_a";
+    } else {
+        throw not_yet_impl($val);
     }
 
     printf("  push %s\n", $push_arg);
