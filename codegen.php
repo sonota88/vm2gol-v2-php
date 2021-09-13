@@ -176,8 +176,18 @@ function codegen_expr($fn_arg_names, $lvar_names, $expr) {
 }
 
 function codegen_call_push_fn_arg($fn_arg_names, $lvar_names, $fn_arg) {
-    $push_arg = to_asm_arg($fn_arg_names, $lvar_names, $fn_arg);
-    if ($push_arg === null) {
+    if (is_int($fn_arg)) {
+        $push_arg = $fn_arg;
+    } elseif (is_string($fn_arg)) {
+        $str = $fn_arg;
+        if (0 <= arr_index($fn_arg_names, $str)) {
+            $push_arg = to_fn_arg_ref($fn_arg_names, $str);
+        } elseif (0 <= arr_index($lvar_names, $str)) {
+            $push_arg = to_lvar_ref($lvar_names, $str);
+        } else {
+            throw not_yet_impl($fn_arg);
+        }
+    } else {
         throw not_yet_impl($fn_arg);
     }
 
