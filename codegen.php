@@ -51,25 +51,6 @@ function to_lvar_ref($names, $name) {
     return "[bp:-" . ($i + 1) . "]";
 }
 
-function to_asm_arg($fn_arg_names, $lvar_names, $val) {
-    if (is_array($val)) {
-        return null;
-    } elseif (is_int($val)) {
-        return $val;
-    } elseif (is_string($val)) {
-        $str = $val;
-        if (0 <= arr_index($fn_arg_names, $str)) {
-            return to_fn_arg_ref($fn_arg_names, $str);
-        } elseif (0 <= arr_index($lvar_names, $str)) {
-            return to_lvar_ref($lvar_names, $str);
-        } else {
-            return null;
-        }
-    } else {
-        return null;
-    }
-}
-
 function codegen_var($fn_arg_names, $lvar_names, $stmt_rest) {
     print("  sub_sp 1\n");
 
