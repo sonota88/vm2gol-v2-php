@@ -115,9 +115,9 @@ test_tokenize_nn() {
   echo "case ${nn}"
 
   local temp_tokens_file="${TEMP_DIR}/test.tokens.txt"
-  local exp_tokens_file="${TEST_DIR}/tokenize_exp_${nn}.txt"
+  local exp_tokens_file="${TEST_DIR}/lex/exp_${nn}.txt"
 
-  run_tokenize ${TEST_DIR}/tokenize_${nn}.vg.txt \
+  run_tokenize ${TEST_DIR}/lex/${nn}.vg.txt \
     > $temp_tokens_file
   if [ $? -ne 0 ]; then
     ERRS="${ERRS},${nn}_tokenize"
