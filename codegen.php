@@ -160,6 +160,17 @@ function _codegen_expr_binary($fn_arg_names, $lvar_names, $expr) {
 function codegen_expr($fn_arg_names, $lvar_names, $expr) {
     if (is_int($expr)) {
         printf("  cp " . $expr . " reg_a\n");
+    } elseif (is_string($expr)) {
+        $str = $expr;
+        if (0 <= arr_index($fn_arg_names, $str)) {
+            $cp_src = to_fn_arg_ref($fn_arg_names, $str);
+            printf("  cp " . $cp_src . " reg_a\n");
+        } elseif (0 <= arr_index($lvar_names, $str)) {
+            $cp_src = to_lvar_ref($lvar_names, $str);
+            printf("  cp " . $cp_src . " reg_a\n");
+        } else {
+            throw not_yet_impl($expr);
+        }
     } elseif (is_array($expr)) {
         _codegen_expr_binary($fn_arg_names, $lvar_names, $expr);
     } else {
