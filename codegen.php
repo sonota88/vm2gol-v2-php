@@ -59,27 +59,6 @@ function codegen_var($fn_arg_names, $lvar_names, $stmt_rest) {
     }
 }
 
-function _codegen_expr_push($fn_arg_names, $lvar_names, $val) {
-    if (is_int($val)) {
-        printf("  cp " . $val . " reg_a\n");
-    } elseif (is_string($val)) {
-        $str = $val;
-        if (0 <= arr_index($fn_arg_names, $str)) {
-            $cp_src = to_fn_arg_ref($fn_arg_names, $str);
-            printf("  cp " . $cp_src . " reg_a\n");
-        } elseif (0 <= arr_index($lvar_names, $str)) {
-            $cp_src = to_lvar_ref($lvar_names, $str);
-            printf("  cp " . $cp_src . " reg_a\n");
-        } else {
-            throw not_yet_impl($val);
-        }
-    } elseif (is_array($val)) {
-        _codegen_expr_binary($fn_arg_names, $lvar_names, $val);
-    } else {
-        throw not_yet_impl($val);
-    }
-}
-
 function codegen_expr_add() {
     printf("  pop reg_b\n");
     printf("  pop reg_a\n");
@@ -139,9 +118,9 @@ function _codegen_expr_binary($fn_arg_names, $lvar_names, $expr) {
     $term_l = $args[0];
     $term_r = $args[1];
 
-    _codegen_expr_push($fn_arg_names, $lvar_names, $term_l);
+    codegen_expr($fn_arg_names, $lvar_names, $term_l);
     printf("  push reg_a\n");
-    _codegen_expr_push($fn_arg_names, $lvar_names, $term_r);
+    codegen_expr($fn_arg_names, $lvar_names, $term_r);
     printf("  push reg_a\n");
 
     if ($op === "+") {
