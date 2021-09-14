@@ -266,49 +266,7 @@ function codegen_set($fn_arg_names, $lvar_names, $rest) {
 function codegen_return($lvar_names, $stmt_rest) {
     $retval = head($stmt_rest);
 
-    if (is_int($retval)) {
-        $arg_retval = $retval;
-        printf("  cp %s reg_a\n", $arg_retval);
-    } elseif (is_string($retval)) {
-        $str = $retval;
-
-        if (0 <= arr_index($lvar_names, $str)) {
-            $arg_retval = to_lvar_ref($lvar_names, $str);
-            printf("  cp %s reg_a\n", $arg_retval);
-        } else {
-
-            if (preg_match("/^vram\[(.+?)\]/", $str, $m)) {
-                $vram_arg = $m[1];
-
-                if (preg_match("/^[0-9]+$/", $vram_arg)) {
-                    throw not_yet_impl($retval);
-                } else {
-
-                    if (is_int($vram_arg)) {
-                        $vram_ref = $vram_arg;
-                    } elseif (is_string($vram_arg)) {
-                        $str = $vram_arg;
-                        if (0 <= arr_index($lvar_names, $str)) {
-                            $vram_ref = to_lvar_ref($lvar_names, $str);
-                        } else {
-                            throw not_yet_impl($retval);
-                        }
-                    } else {
-                        throw not_yet_impl($retval);
-                    }
-
-                    printf("  get_vram %s reg_a\n", $vram_ref);
-
-                }
-            } else {
-                throw not_yet_impl($retval);
-            }
-
-        }
-
-    } else {
-        throw not_yet_impl($retval);
-    }
+    codegen_expr([], $lvar_names, $retval);
 }
 
 function codegen_vm_comment($cmt) {
