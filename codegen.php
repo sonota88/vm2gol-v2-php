@@ -147,6 +147,18 @@ function codegen_expr($fn_arg_names, $lvar_names, $expr) {
         } elseif (0 <= arr_index($lvar_names, $str)) {
             $cp_src = to_lvar_ref($lvar_names, $str);
             printf("  cp " . $cp_src . " reg_a\n");
+        } elseif (preg_match("/^vram\[(.+?)\]/", $expr, $m)) {
+            $vram_arg = $m[1];
+            if (preg_match("/^[0-9]+$/", $vram_arg)) {
+                $vram_ref = $vram_arg;
+            } else {
+                if (0 <= arr_index($lvar_names, $vram_arg)) {
+                    $vram_ref = to_lvar_ref($lvar_names, $vram_arg);
+                } else {
+                    throw not_yet_impl($vram_arg);
+                }
+            }
+            printf("  get_vram %s reg_a\n", $vram_ref);
         } else {
             throw not_yet_impl($expr);
         }
