@@ -173,7 +173,7 @@ function codegen_call_push_fn_arg($fn_arg_names, $lvar_names, $fn_arg) {
         throw not_yet_impl($fn_arg);
     }
 
-    printf("  push %s\n", $push_arg);
+    printf("  cp %s reg_a\n", $push_arg);
 }
 
 function codegen_call($fn_arg_names, $lvar_names, $stmt_rest) {
@@ -182,6 +182,7 @@ function codegen_call($fn_arg_names, $lvar_names, $stmt_rest) {
 
     foreach (array_reverse($fn_args) as $fn_arg) {
         codegen_call_push_fn_arg($fn_arg_names, $lvar_names, $fn_arg);
+        printf("  push reg_a\n");
     }
 
     codegen_vm_comment("call  $fn_name");
@@ -201,6 +202,7 @@ function codegen_call_set($fn_arg_names, $lvar_names, $stmt_rest) {
 
     foreach (array_reverse($fn_args) as $fn_arg) {
         codegen_call_push_fn_arg($fn_arg_names, $lvar_names, $fn_arg);
+        printf("  push reg_a\n");
     }
 
     codegen_vm_comment("call_set  " . $fn_name);

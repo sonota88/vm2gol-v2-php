@@ -13,7 +13,8 @@ label sub
 label main
   push bp
   cp sp bp
-  push 1
+  cp 1 reg_a
+  push reg_a
   _cmt call~~sub
   call sub
   add_sp 1
