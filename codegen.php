@@ -158,7 +158,9 @@ function _codegen_expr_binary($fn_arg_names, $lvar_names, $expr) {
 }
 
 function codegen_expr($fn_arg_names, $lvar_names, $expr) {
-    if (is_array($expr)) {
+    if (is_int($expr)) {
+        printf("  cp " . $expr . " reg_a\n");
+    } elseif (is_array($expr)) {
         _codegen_expr_binary($fn_arg_names, $lvar_names, $expr);
     } else {
         throw not_yet_impl($expr);
