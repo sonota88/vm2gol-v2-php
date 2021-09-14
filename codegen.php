@@ -326,12 +326,8 @@ function codegen_case($fn_arg_names, $lvar_names, $when_blocks) {
         $cond = head($when_block);
         $rest = rest($when_block);
 
-        $cond_head = head($cond);
-        $cond_rest = rest($cond);
-
         printf("  # when_%d_%d\n", $label_id, $when_idx);
 
-        if ($cond_head === "eq") {
             printf("  # -->> expr\n");
             codegen_expr($fn_arg_names, $lvar_names, $cond);
             printf("  # <<-- expr\n");
@@ -348,9 +344,6 @@ function codegen_case($fn_arg_names, $lvar_names, $when_blocks) {
 
             printf("  jump %s\n", $label_end);
             printf("label %s_%d\n", $label_end_when_head, $when_idx);
-        } else {
-            throw not_yet_impl($cond_head);
-        }
     }
 
     printf("label end_case_%d\n", $label_id);
