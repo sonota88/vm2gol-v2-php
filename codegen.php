@@ -292,7 +292,7 @@ function codegen_while($fn_arg_names, $lvar_names, $stmt_rest) {
 
     codegen_expr($fn_arg_names, $lvar_names, $cond_expr);
 
-    printf("  set_reg_b 1\n");
+    printf("  cp 1 reg_b\n");
     printf("  compare\n");
 
     printf("  jump_eq %s\n", $label_true);
@@ -332,7 +332,7 @@ function codegen_case($fn_arg_names, $lvar_names, $when_blocks) {
             codegen_expr($fn_arg_names, $lvar_names, $cond);
             printf("  # <<-- expr\n");
 
-            printf("  set_reg_b 1\n");
+            printf("  cp 1 reg_b\n");
 
             printf("  compare\n");
             printf("  jump_eq %s_%d\n", $label_when_head, $when_idx);
