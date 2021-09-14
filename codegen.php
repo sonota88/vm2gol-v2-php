@@ -318,22 +318,22 @@ function codegen_case($fn_arg_names, $lvar_names, $when_blocks) {
 
         printf("  # when_%d_%d\n", $label_id, $when_idx);
 
-            printf("  # -->> expr\n");
-            codegen_expr($fn_arg_names, $lvar_names, $cond);
-            printf("  # <<-- expr\n");
+        printf("  # -->> expr\n");
+        codegen_expr($fn_arg_names, $lvar_names, $cond);
+        printf("  # <<-- expr\n");
 
-            printf("  cp 1 reg_b\n");
+        printf("  cp 1 reg_b\n");
 
-            printf("  compare\n");
-            printf("  jump_eq %s_%d\n", $label_when_head, $when_idx);
-            printf("  jump %s_%d\n", $label_end_when_head, $when_idx);
+        printf("  compare\n");
+        printf("  jump_eq %s_%d\n", $label_when_head, $when_idx);
+        printf("  jump %s_%d\n", $label_end_when_head, $when_idx);
 
-            printf("label %s_%d\n", $label_when_head, $when_idx);
+        printf("label %s_%d\n", $label_when_head, $when_idx);
 
-            codegen_stmts($fn_arg_names, $lvar_names, $rest);
+        codegen_stmts($fn_arg_names, $lvar_names, $rest);
 
-            printf("  jump %s\n", $label_end);
-            printf("label %s_%d\n", $label_end_when_head, $when_idx);
+        printf("  jump %s\n", $label_end);
+        printf("label %s_%d\n", $label_end_when_head, $when_idx);
     }
 
     printf("label end_case_%d\n", $label_id);
