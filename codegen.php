@@ -83,11 +83,11 @@ function codegen_expr_eq() {
     printf("  compare\n");
     printf("  jump_eq %s\n", $then_label);
 
-    printf("  set_reg_a 0\n");
+    printf("  cp 0 reg_a\n");
     printf("  jump %s\n", $end_label);
 
     printf("label %s\n", $then_label);
-    printf("  set_reg_a 1\n");
+    printf("  cp 1 reg_a\n");
     printf("label %s\n", $end_label);
 }
 
@@ -103,11 +103,11 @@ function codegen_expr_neq() {
     printf("  compare\n");
     printf("  jump_eq %s\n", $then_label);
 
-    printf("  set_reg_a 1\n");
+    printf("  cp 1 reg_a\n");
     printf("  jump %s\n", $end_label);
 
     printf("label %s\n", $then_label);
-    printf("  set_reg_a 0\n");
+    printf("  cp 0 reg_a\n");
     printf("label %s\n", $end_label);
 }
 
