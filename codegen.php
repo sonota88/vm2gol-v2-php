@@ -157,6 +157,14 @@ function _codegen_expr_binary($fn_arg_names, $lvar_names, $expr) {
     }
 }
 
+function codegen_expr($fn_arg_names, $lvar_names, $expr) {
+    if (is_array($expr)) {
+        _codegen_expr_binary($fn_arg_names, $lvar_names, $expr);
+    } else {
+        throw not_yet_impl($expr);
+    }
+}
+
 function codegen_call_push_fn_arg($fn_arg_names, $lvar_names, $fn_arg) {
     if (is_int($fn_arg)) {
         $push_arg = $fn_arg;
