@@ -190,17 +190,7 @@ function codegen_call_set($fn_arg_names, $lvar_names, $stmt_rest) {
     $lvar_name = $stmt_rest[0];
     $fn_temp   = $stmt_rest[1];
 
-    $fn_name = head($fn_temp);
-    $fn_args = rest($fn_temp);
-
-    foreach (array_reverse($fn_args) as $fn_arg) {
-        codegen_expr($fn_arg_names, $lvar_names, $fn_arg);
-        printf("  push reg_a\n");
-    }
-
-    codegen_vm_comment("call_set  " . $fn_name);
-    printf("  call %s\n", $fn_name);
-    printf("  add_sp %d\n", count($fn_args));
+    codegen_call($fn_arg_names, $lvar_names, $fn_temp);
 
     $ref = to_lvar_ref($lvar_names, $lvar_name);
     printf("  cp reg_a %s\n", $ref);
