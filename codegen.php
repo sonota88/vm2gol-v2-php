@@ -290,7 +290,7 @@ function codegen_while($fn_arg_names, $lvar_names, $stmt_rest) {
 
     printf("label %s\n", $label_begin);
 
-    _codegen_expr_binary($fn_arg_names, $lvar_names, $cond_expr);
+    codegen_expr($fn_arg_names, $lvar_names, $cond_expr);
 
     printf("  set_reg_b 1\n");
     printf("  compare\n");
@@ -333,7 +333,7 @@ function codegen_case($fn_arg_names, $lvar_names, $when_blocks) {
 
         if ($cond_head === "eq") {
             printf("  # -->> expr\n");
-            _codegen_expr_binary($fn_arg_names, $lvar_names, $cond);
+            codegen_expr($fn_arg_names, $lvar_names, $cond);
             printf("  # <<-- expr\n");
 
             printf("  set_reg_b 1\n");
