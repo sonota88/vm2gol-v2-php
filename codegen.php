@@ -212,50 +212,8 @@ function codegen_set($fn_arg_names, $lvar_names, $rest) {
     $dest = $rest[0];
     $expr = $rest[1];
 
-    if (is_int($expr)) {
-        $arg_src = $expr;
-    } elseif (is_string($expr)) {
-        $str = $expr;
-        if (0 <= arr_index($fn_arg_names, $str)) {
-            $arg_src = to_fn_arg_ref($fn_arg_names, $str);
-        } elseif (0 <= arr_index($lvar_names, $str)) {
-            $arg_src = to_lvar_ref($lvar_names, $str);
-        } else {
-            if (preg_match("/^vram\[(.+?)\]/", $expr, $m)) {
-                $vram_arg = $m[1];
-                if (preg_match("/^[0-9]+$/", $vram_arg)) {
-                    printf("  get_vram %s reg_a\n", $vram_arg);
-                } else {
-
-                    if (is_int($vram_arg)) {
-                        $vram_ref = $vram_arg;
-                    } elseif (is_string($vram_arg)) {
-                        $str = $vram_arg;
-                        if (0 <= arr_index($fn_arg_names, $str)) {
-                            $vram_ref = to_fn_arg_ref($fn_arg_names, $str);
-                        } elseif (0 <= arr_index($lvar_names, $str)) {
-                            $vram_ref = to_lvar_ref($lvar_names, $str);
-                        } else {
-                            throw not_yet_impl($expr);
-                        }
-                    } else {
-                        throw not_yet_impl($expr);
-                    }
-
-                    printf("  get_vram %s reg_a\n", $vram_ref);
-
-                }
-                $arg_src = "reg_a";
-            } else {
-                throw not_yet_impl($expr);
-            }
-        }
-    } elseif (is_array($expr)) {
-        _codegen_expr_binary($fn_arg_names, $lvar_names, $expr);
-        $arg_src = "reg_a";
-    } else {
-        throw not_yet_impl($expr);
-    }
+    codegen_expr($fn_arg_names, $lvar_names, $expr);
+    $arg_src = "reg_a";
 
     if (is_int($dest)) {
         $arg_dest = $dest;

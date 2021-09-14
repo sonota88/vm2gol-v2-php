@@ -5,7 +5,8 @@ label main
   cp sp bp
   sub_sp 1
   sub_sp 1
-  cp 0 [bp:-2]
+  cp 0 reg_a
+  cp reg_a [bp:-2]
   get_vram [bp:-2] reg_a
   cp reg_a [bp:-1]
   cp bp sp
