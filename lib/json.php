@@ -43,7 +43,7 @@ function print_indent ($lv) {
     }
 }
 
-function _print_as_json ($tree, $lv) {
+function _json_print ($tree, $lv) {
     print_indent($lv);
     print("[");
 
@@ -56,7 +56,7 @@ function _print_as_json ($tree, $lv) {
         print("\n");
 
         if (is_array($el)) {
-            _print_as_json($el, $lv + 1);
+            _json_print($el, $lv + 1);
         } elseif (is_int($el)) {
             print_indent($lv + 1);
             print($el);
@@ -73,7 +73,7 @@ function _print_as_json ($tree, $lv) {
     print("]");
 }
 
-function print_as_json ($tree) {
-    _print_as_json($tree, 0);
+function json_print ($tree) {
+    _json_print($tree, 0);
     print("\n");
 }

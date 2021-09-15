@@ -8,4 +8,4 @@ $json = read_stdin_all();
 $tree = parse_json($json);
 # var_dump($tree);
 
-print_as_json($tree);
+json_print($tree);

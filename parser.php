@@ -589,4 +589,4 @@ while ($line = fgets(STDIN)) {
 }
 
 $ast = parse();
-print_as_json($ast);
+json_print($ast);
