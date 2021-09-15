@@ -588,6 +588,5 @@ while ($line = fgets(STDIN)) {
     $tokens[]= new Token($m[1], $m[2]);
 }
 
-$tree = parse();
-
-print_as_json($tree);
+$ast = parse();
+print_as_json($ast);
