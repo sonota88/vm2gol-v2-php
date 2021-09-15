@@ -36,7 +36,7 @@ function tokenize($src) {
             $temp = $m[1];
             puts_token("sym", $temp);
             $pos += mb_strlen($temp);
-        } elseif (preg_match("/^([a-z_][a-z0-9_\[\]]*)/", $rest, $m)) {
+        } elseif (preg_match("/^([a-z_][a-z0-9_]*)/", $rest, $m)) {
             $temp = $m[1];
             puts_token("ident", $temp);
             $pos += mb_strlen($temp);
