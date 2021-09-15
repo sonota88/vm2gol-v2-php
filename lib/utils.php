@@ -1,5 +1,9 @@
 <?php
 
+function puts($msg) {
+    fputs(STDOUT, $msg . "\n");
+}
+
 function puts_e($msg) {
     fputs(STDERR, $msg . "\n");
 }
