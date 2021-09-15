@@ -256,7 +256,7 @@ function codegen_while($fn_arg_names, $lvar_names, $stmt_rest) {
     printf("\n");
 }
 
-function codegen_case($fn_arg_names, $lvar_names, $when_blocks) {
+function codegen_case($fn_arg_names, $lvar_names, $when_clauses) {
     puts_fn("codegen_case");
 
     $label_id = get_label_id();
@@ -269,11 +269,11 @@ function codegen_case($fn_arg_names, $lvar_names, $when_blocks) {
     printf("\n");
     printf("  # -->> case_%d\n", $label_id);
 
-    foreach ($when_blocks as $when_block) {
+    foreach ($when_clauses as $when_clause) {
         $when_idx++;
 
-        $cond = head($when_block);
-        $rest = rest($when_block);
+        $cond = head($when_clause);
+        $rest = rest($when_clause);
 
         printf("  # when_%d_%d\n", $label_id, $when_idx);
 
