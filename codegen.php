@@ -176,9 +176,9 @@ function codegen_call_set($fn_arg_names, $lvar_names, $stmt_rest) {
     puts_fn("codegen_call_set");
 
     $lvar_name = $stmt_rest[0];
-    $fn_temp   = $stmt_rest[1];
+    $funcall   = $stmt_rest[1];
 
-    codegen_call($fn_arg_names, $lvar_names, $fn_temp);
+    codegen_call($fn_arg_names, $lvar_names, $funcall);
 
     $ref = to_lvar_ref($lvar_names, $lvar_name);
     printf("  cp reg_a %s\n", $ref);
