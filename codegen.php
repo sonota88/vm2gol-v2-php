@@ -410,6 +410,19 @@ function codegen_top_stmts($top_stmts) {
     }
 }
 
+function codegen_builtin_set_vram() {
+    puts("");
+    puts("label set_vram");
+    puts("  push bp");
+    puts("  cp sp bp");
+
+    puts("  set_vram [bp:2] [bp:3]"); # vram_addr value
+
+    puts("  cp bp sp");
+    puts("  pop bp");
+    puts("  ret");
+}
+
 function codegen($ast) {
     print("  call main\n");
     print("  exit\n");
@@ -417,6 +430,10 @@ function codegen($ast) {
     $top_stmts = rest($ast);
 
     codegen_top_stmts($top_stmts);
+
+    puts("#>builtins");
+    codegen_builtin_set_vram();
+    puts("#<builtins");
 }
  
 # --------------------------------
