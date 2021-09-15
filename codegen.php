@@ -423,6 +423,19 @@ function codegen_builtin_set_vram() {
     puts("  ret");
 }
 
+function codegen_builtin_get_vram() {
+    puts("");
+    puts("label get_vram");
+    puts("  push bp");
+    puts("  cp sp bp");
+
+    puts("  get_vram [bp:2] reg_a"); # vram_addr dest
+
+    puts("  cp bp sp");
+    puts("  pop bp");
+    puts("  ret");
+}
+
 function codegen($ast) {
     print("  call main\n");
     print("  exit\n");
@@ -433,6 +446,7 @@ function codegen($ast) {
 
     puts("#>builtins");
     codegen_builtin_set_vram();
+    codegen_builtin_get_vram();
     puts("#<builtins");
 }
  
