@@ -5,7 +5,7 @@ require "lib/json.php";
 
 $json = read_stdin_all();
 # print($json);
-$tree = parse_json($json);
+$tree = json_parse($json);
 # var_dump($tree);
 
 json_print($tree);

@@ -422,5 +422,5 @@ function codegen($ast) {
 # --------------------------------
 
 $src = read_stdin_all();
-$ast = parse_json($src);
+$ast = json_parse($src);
 codegen($ast);

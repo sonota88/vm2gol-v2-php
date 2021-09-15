@@ -32,7 +32,7 @@ function _parse ($json) {
     return [$xs, $pos];
 }
 
-function parse_json ($json) {
+function json_parse ($json) {
     list($xs, $size) = _parse($json);
     return $xs;
 }
