@@ -409,16 +409,18 @@ function codegen_top_stmts($top_stmts) {
         }
     }
 }
+
+function codegen($tree) {
+    print("  call main\n");
+    print("  exit\n");
+    
+    $top_stmts = rest($tree);
+
+    codegen_top_stmts($top_stmts);
+}
  
 # --------------------------------
 
 $src = read_stdin_all();
-
 $tree = parse_json($src);
-
-print("  call main\n");
-print("  exit\n");
- 
-$top_stmts = rest($tree);
-
-codegen_top_stmts($top_stmts);
+codegen($tree);
