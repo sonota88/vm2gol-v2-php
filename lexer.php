@@ -24,7 +24,7 @@ function tokenize($src) {
             $temp = $m[1];
             puts_token("str", $temp);
             $pos += mb_strlen($temp) + 2;
-        } elseif (preg_match("/^(func|set|var|call_set|call|return|case|while|_cmt)[^a-z]/", $rest, $m)) {
+        } elseif (preg_match("/^(func|set|var|call_set|call|return|case|while|_cmt)[^a-z_]/", $rest, $m)) {
             $temp = $m[1];
             puts_token("kw", $temp);
             $pos += mb_strlen($temp);
