@@ -110,49 +110,20 @@ function parse_arg() {
     }
 }
 
-function parse_args_first() {
-    # puts_fn("parse_args_first");
-
-    $t = peek(0);
-
-    if ($t->is("sym", ")")) {
-        return null;
-    }
-
-    return parse_arg();
-}
-
-function parse_args_rest() {
-    # puts_fn("parse_args_rest");
-
-    $t = peek(0);
-
-    if ($t->is("sym", ")")) {
-        return null;
-    }
-
-    consume_sym(",");
-
-    return parse_arg();
-}
-
 function parse_args() {
     puts_fn("parse_args");
 
     $args = [];
 
-    $first_arg = parse_args_first();
-    if ($first_arg === null) {
+    if (peek(0)->str == ")") {
         return $args;
     }
-    $args[]= $first_arg;
 
-    while (1) {
-        $rest_arg = parse_args_rest();
-        if ($rest_arg === null) {
-            break;
-        }
-        $args[]= $rest_arg;
+    $args[]= parse_arg();
+
+    while (peek(0)->str == ",") {
+        consume_sym(",");
+        $args[]= parse_arg();
     }
 
     return $args;
