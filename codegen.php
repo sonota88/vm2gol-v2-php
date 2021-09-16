@@ -43,12 +43,12 @@ function to_fn_arg_disp($names, $name) {
     return $i + 2;
 }
 
-function to_lvar_ref($names, $name) {
+function to_lvar_disp($names, $name) {
     $i = arr_index($names, $name);
     if ($i === -1) {
         throw new Exception("lvar not found");
     }
-    return "[bp:-" . ($i + 1) . "]";
+    return -($i + 1);
 }
 
 # --------------------------------
@@ -147,8 +147,8 @@ function gen_expr($fn_arg_names, $lvar_names, $expr) {
             $disp = to_fn_arg_disp($fn_arg_names, $str);
             printf("  cp [bp:%d] reg_a\n", $disp);
         } elseif (0 <= arr_index($lvar_names, $str)) {
-            $cp_src = to_lvar_ref($lvar_names, $str);
-            printf("  cp " . $cp_src . " reg_a\n");
+            $disp = to_lvar_disp($lvar_names, $str);
+            printf("  cp [bp:%d] reg_a\n", $disp);
         } else {
             throw not_yet_impl($expr);
         }
@@ -182,8 +182,8 @@ function gen_call_set($fn_arg_names, $lvar_names, $stmt_rest) {
 
     gen_call($fn_arg_names, $lvar_names, $funcall);
 
-    $ref = to_lvar_ref($lvar_names, $lvar_name);
-    printf("  cp reg_a %s\n", $ref);
+    $disp = to_lvar_disp($lvar_names, $lvar_name);
+    printf("  cp reg_a [bp:%d]\n", $disp);
 }
 
 function gen_set($fn_arg_names, $lvar_names, $rest) {
@@ -201,8 +201,8 @@ function gen_set($fn_arg_names, $lvar_names, $rest) {
     } elseif (is_string($dest)) {
         $str = $dest;
         if (0 <= arr_index($lvar_names, $str)) {
-            $arg_dest = to_lvar_ref($lvar_names, $str);
-            printf("  cp ${arg_src} ${arg_dest}\n");
+            $disp = to_lvar_disp($lvar_names, $str);
+            printf("  cp ${arg_src} [bp:%d]\n", $disp);
         } else {
             throw not_yet_impl($dest);
         }
