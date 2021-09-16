@@ -53,27 +53,27 @@ function to_lvar_ref($names, $name) {
 
 # --------------------------------
 
-function codegen_var($fn_arg_names, $lvar_names, $stmt_rest) {
+function gen_var($fn_arg_names, $lvar_names, $stmt_rest) {
     print("  sub_sp 1\n");
 
     if (count($stmt_rest) == 2) {
-        codegen_set($fn_arg_names, $lvar_names, $stmt_rest);
+        gen_set($fn_arg_names, $lvar_names, $stmt_rest);
     }
 }
 
-function codegen_expr_add() {
+function gen_expr_add() {
     printf("  pop reg_b\n");
     printf("  pop reg_a\n");
     printf("  add_ab\n");
 }
 
-function codegen_expr_mult() {
+function gen_expr_mult() {
     printf("  pop reg_b\n");
     printf("  pop reg_a\n");
     printf("  mult_ab\n");
 }
 
-function codegen_expr_eq() {
+function gen_expr_eq() {
     $label_id = get_label_id();
 
     $then_label = "then_$label_id";
@@ -93,7 +93,7 @@ function codegen_expr_eq() {
     printf("label %s\n", $end_label);
 }
 
-function codegen_expr_neq() {
+function gen_expr_neq() {
     $label_id = get_label_id();
 
     $then_label = "then_$label_id";
@@ -113,32 +113,32 @@ function codegen_expr_neq() {
     printf("label %s\n", $end_label);
 }
 
-function _codegen_expr_binary($fn_arg_names, $lvar_names, $expr) {
+function _gen_expr_binary($fn_arg_names, $lvar_names, $expr) {
     $op   = head($expr);
     $args = rest($expr);
 
     $term_l = $args[0];
     $term_r = $args[1];
 
-    codegen_expr($fn_arg_names, $lvar_names, $term_l);
+    gen_expr($fn_arg_names, $lvar_names, $term_l);
     printf("  push reg_a\n");
-    codegen_expr($fn_arg_names, $lvar_names, $term_r);
+    gen_expr($fn_arg_names, $lvar_names, $term_r);
     printf("  push reg_a\n");
 
     if ($op === "+") {
-        codegen_expr_add();
+        gen_expr_add();
     } elseif ($op === "*") {
-        codegen_expr_mult();
+        gen_expr_mult();
     } elseif ($op === "eq") {
-        codegen_expr_eq();
+        gen_expr_eq();
     } elseif ($op === "neq") {
-        codegen_expr_neq();
+        gen_expr_neq();
     } else {
         throw not_yet_impl($op);
     }
 }
 
-function codegen_expr($fn_arg_names, $lvar_names, $expr) {
+function gen_expr($fn_arg_names, $lvar_names, $expr) {
     if (is_int($expr)) {
         printf("  cp " . $expr . " reg_a\n");
     } elseif (is_string($expr)) {
@@ -153,46 +153,46 @@ function codegen_expr($fn_arg_names, $lvar_names, $expr) {
             throw not_yet_impl($expr);
         }
     } elseif (is_array($expr)) {
-        _codegen_expr_binary($fn_arg_names, $lvar_names, $expr);
+        _gen_expr_binary($fn_arg_names, $lvar_names, $expr);
     } else {
         throw not_yet_impl($expr);
     }
 }
 
-function codegen_call($fn_arg_names, $lvar_names, $stmt_rest) {
+function gen_call($fn_arg_names, $lvar_names, $stmt_rest) {
     $fn_name = head($stmt_rest);
     $fn_args = rest($stmt_rest);
 
     foreach (array_reverse($fn_args) as $fn_arg) {
-        codegen_expr($fn_arg_names, $lvar_names, $fn_arg);
+        gen_expr($fn_arg_names, $lvar_names, $fn_arg);
         printf("  push reg_a\n");
     }
 
-    codegen_vm_comment("call  $fn_name");
+    gen_vm_comment("call  $fn_name");
     printf("  call %s\n", $fn_name);
 
     printf("  add_sp %d\n", count($fn_args));
 }
 
-function codegen_call_set($fn_arg_names, $lvar_names, $stmt_rest) {
-    puts_fn("codegen_call_set");
+function gen_call_set($fn_arg_names, $lvar_names, $stmt_rest) {
+    puts_fn("gen_call_set");
 
     $lvar_name = $stmt_rest[0];
     $funcall   = $stmt_rest[1];
 
-    codegen_call($fn_arg_names, $lvar_names, $funcall);
+    gen_call($fn_arg_names, $lvar_names, $funcall);
 
     $ref = to_lvar_ref($lvar_names, $lvar_name);
     printf("  cp reg_a %s\n", $ref);
 }
 
-function codegen_set($fn_arg_names, $lvar_names, $rest) {
-    puts_fn("codegen_set");
+function gen_set($fn_arg_names, $lvar_names, $rest) {
+    puts_fn("gen_set");
 
     $dest = $rest[0];
     $expr = $rest[1];
 
-    codegen_expr($fn_arg_names, $lvar_names, $expr);
+    gen_expr($fn_arg_names, $lvar_names, $expr);
     $arg_src = "reg_a";
 
     if (is_int($dest)) {
@@ -214,20 +214,20 @@ function codegen_set($fn_arg_names, $lvar_names, $rest) {
     }
 }
 
-function codegen_return($lvar_names, $stmt_rest) {
+function gen_return($lvar_names, $stmt_rest) {
     $retval = head($stmt_rest);
 
-    codegen_expr([], $lvar_names, $retval);
+    gen_expr([], $lvar_names, $retval);
 }
 
-function codegen_vm_comment($cmt) {
+function gen_vm_comment($cmt) {
     $cmt = preg_replace("/ /", "~", $cmt);
 
     printf("  _cmt %s\n", $cmt);
 }
 
-function codegen_while($fn_arg_names, $lvar_names, $stmt_rest) {
-    puts_fn("codegen_while");
+function gen_while($fn_arg_names, $lvar_names, $stmt_rest) {
+    puts_fn("gen_while");
 
     $cond_expr = $stmt_rest[0];
     $body      = $stmt_rest[1];
@@ -241,7 +241,7 @@ function codegen_while($fn_arg_names, $lvar_names, $stmt_rest) {
 
     printf("label %s\n", $label_begin);
 
-    codegen_expr($fn_arg_names, $lvar_names, $cond_expr);
+    gen_expr($fn_arg_names, $lvar_names, $cond_expr);
 
     printf("  cp 1 reg_b\n");
     printf("  compare\n");
@@ -250,7 +250,7 @@ function codegen_while($fn_arg_names, $lvar_names, $stmt_rest) {
     printf("  jump %s\n", $label_end);
     printf("label %s\n", $label_true);
 
-    codegen_stmts($fn_arg_names, $lvar_names, $body);
+    gen_stmts($fn_arg_names, $lvar_names, $body);
 
     printf("  jump %s\n", $label_begin);
 
@@ -258,8 +258,8 @@ function codegen_while($fn_arg_names, $lvar_names, $stmt_rest) {
     printf("\n");
 }
 
-function codegen_case($fn_arg_names, $lvar_names, $when_clauses) {
-    puts_fn("codegen_case");
+function gen_case($fn_arg_names, $lvar_names, $when_clauses) {
+    puts_fn("gen_case");
 
     $label_id = get_label_id();
     $when_idx = -1;
@@ -280,7 +280,7 @@ function codegen_case($fn_arg_names, $lvar_names, $when_clauses) {
         printf("  # when_%d_%d\n", $label_id, $when_idx);
 
         printf("  # -->> expr\n");
-        codegen_expr($fn_arg_names, $lvar_names, $cond);
+        gen_expr($fn_arg_names, $lvar_names, $cond);
         printf("  # <<-- expr\n");
 
         printf("  cp 1 reg_b\n");
@@ -291,7 +291,7 @@ function codegen_case($fn_arg_names, $lvar_names, $when_clauses) {
 
         printf("label %s_%d\n", $label_when_head, $when_idx);
 
-        codegen_stmts($fn_arg_names, $lvar_names, $rest);
+        gen_stmts($fn_arg_names, $lvar_names, $rest);
 
         printf("  jump %s\n", $label_end);
         printf("label %s_%d\n", $label_end_when_head, $when_idx);
@@ -302,31 +302,31 @@ function codegen_case($fn_arg_names, $lvar_names, $when_clauses) {
     printf("\n");
 }
 
-function codegen_stmt($fn_arg_names, $lvar_names, $stmt) {
-    puts_fn("codegen_stmt");
+function gen_stmt($fn_arg_names, $lvar_names, $stmt) {
+    puts_fn("gen_stmt");
 
     $stmt_head = head($stmt);
     $stmt_rest = rest($stmt);
 
-    if     ($stmt_head === "set"     ) { codegen_set(       $fn_arg_names, $lvar_names, $stmt_rest); }
-    elseif ($stmt_head === "call"    ) { codegen_call(      $fn_arg_names, $lvar_names, $stmt_rest); }
-    elseif ($stmt_head === "call_set") { codegen_call_set(  $fn_arg_names, $lvar_names, $stmt_rest); }
-    elseif ($stmt_head === "return"  ) { codegen_return(                   $lvar_names, $stmt_rest); }
-    elseif ($stmt_head === "while"   ) { codegen_while(     $fn_arg_names, $lvar_names, $stmt_rest); }
-    elseif ($stmt_head === "case"    ) { codegen_case(      $fn_arg_names, $lvar_names, $stmt_rest); }
-    elseif ($stmt_head === "_cmt"    ) { codegen_vm_comment($stmt_rest[0]); }
+    if     ($stmt_head === "set"     ) { gen_set(       $fn_arg_names, $lvar_names, $stmt_rest); }
+    elseif ($stmt_head === "call"    ) { gen_call(      $fn_arg_names, $lvar_names, $stmt_rest); }
+    elseif ($stmt_head === "call_set") { gen_call_set(  $fn_arg_names, $lvar_names, $stmt_rest); }
+    elseif ($stmt_head === "return"  ) { gen_return(                   $lvar_names, $stmt_rest); }
+    elseif ($stmt_head === "while"   ) { gen_while(     $fn_arg_names, $lvar_names, $stmt_rest); }
+    elseif ($stmt_head === "case"    ) { gen_case(      $fn_arg_names, $lvar_names, $stmt_rest); }
+    elseif ($stmt_head === "_cmt"    ) { gen_vm_comment($stmt_rest[0]); }
     else {
         throw new Exception("Unsupported statement (${stmt_head})");
     }
 }
 
-function codegen_stmts($fn_arg_names, $lvar_names, $stmts) {
+function gen_stmts($fn_arg_names, $lvar_names, $stmts) {
     foreach ($stmts as $stmt) {
-        codegen_stmt($fn_arg_names, $lvar_names, $stmt);
+        gen_stmt($fn_arg_names, $lvar_names, $stmt);
     }
 }
 
-function codegen_func_def($rest) {
+function gen_func_def($rest) {
     $fn_name     = $rest[0];
     $fn_arg_vals = $rest[1];
     $body        = $rest[2];
@@ -347,9 +347,9 @@ function codegen_func_def($rest) {
         if ($stmt[0] === "var") {
             $var_name = $stmt_rest[0];
             $lvar_names[]= $var_name;
-            codegen_var($fn_arg_names, $lvar_names, $stmt_rest);
+            gen_var($fn_arg_names, $lvar_names, $stmt_rest);
         } else {
-            codegen_stmt($fn_arg_names, $lvar_names, $stmt);
+            gen_stmt($fn_arg_names, $lvar_names, $stmt);
         }
     }
 
@@ -358,20 +358,20 @@ function codegen_func_def($rest) {
     print("  ret\n");
 }
 
-function codegen_top_stmts($top_stmts) {
+function gen_top_stmts($top_stmts) {
     foreach ($top_stmts as $top_stmt) {
         $stmt_head = $top_stmt[0];
         $stmt_rest = rest($top_stmt);
 
         if ($stmt_head === "func") {
-            codegen_func_def($stmt_rest);
+            gen_func_def($stmt_rest);
         } else {
-            throw not_yet_impl("codegen_top_stmts");
+            throw not_yet_impl("gen_top_stmts");
         }
     }
 }
 
-function codegen_builtin_set_vram() {
+function gen_builtin_set_vram() {
     puts("");
     puts("label set_vram");
     puts("  push bp");
@@ -384,7 +384,7 @@ function codegen_builtin_set_vram() {
     puts("  ret");
 }
 
-function codegen_builtin_get_vram() {
+function gen_builtin_get_vram() {
     puts("");
     puts("label get_vram");
     puts("  push bp");
@@ -403,11 +403,11 @@ function codegen($ast) {
     
     $top_stmts = rest($ast);
 
-    codegen_top_stmts($top_stmts);
+    gen_top_stmts($top_stmts);
 
     puts("#>builtins");
-    codegen_builtin_set_vram();
-    codegen_builtin_get_vram();
+    gen_builtin_set_vram();
+    gen_builtin_get_vram();
     puts("#<builtins");
 }
  
