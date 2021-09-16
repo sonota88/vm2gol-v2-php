@@ -248,45 +248,34 @@ function parse_var() {
     }
 }
 
-function parse_expr_right($expr_l) {
+function parse_expr_right() {
     puts_fn("parse_expr_right");
 
     $t = peek(0);
 
-    if (
-         $t->is("sym", ";")
-      || $t->is("sym", ")")
-    ) {
-        return $expr_l;
-    }
-
-    $expr_els = null;
-
     if ($t->is("sym", "+")) {
         consume_sym("+");
         $expr_r = parse_expr();
-        $expr_els = ["+", $expr_l, $expr_r];
+        return ["+", $expr_r];
 
     } elseif ($t->is("sym", "*")) {
         consume_sym("*");
         $expr_r = parse_expr();
-        $expr_els = ["*", $expr_l, $expr_r];
+        return ["*", $expr_r];
 
     } elseif ($t->is("sym", "==")) {
         consume_sym("==");
         $expr_r = parse_expr();
-        $expr_els = ["eq", $expr_l, $expr_r];
+        return ["eq", $expr_r];
 
     } elseif ($t->is("sym", "!=")) {
         consume_sym("!=");
         $expr_r = parse_expr();
-        $expr_els = ["neq", $expr_l, $expr_r];
+        return ["neq", $expr_r];
 
     } else {
-        throw not_yet_impl($t);
+        return NULL;
     }
-
-    return $expr_els;
 }
 
 function parse_expr() {
@@ -300,20 +289,53 @@ function parse_expr() {
         consume_sym("(");
         $expr_l = parse_expr();
         consume_sym(")");
-        return parse_expr_right($expr_l);
+
+        $op_right = parse_expr_right();
+
+        if (is_null($op_right)) {
+            return $expr_l;
+        }
+
+        return [
+            $op_right[0], # op
+            $expr_l,
+            $op_right[1] # expr_r
+            ];
     }
 
     if ($tl->kind_eq("int")) {
         $pos++;
         $n = $tl->str;
         $expr_l = intval($n);
-        return parse_expr_right($expr_l);
+
+        $op_right = parse_expr_right();
+
+        if (is_null($op_right)) {
+            return $expr_l;
+        }
+
+        return [
+            $op_right[0], # op
+            $expr_l,
+            $op_right[1] # expr_r
+            ];
 
     } elseif ($tl->kind_eq("ident")) {
         $pos++;
         $s = $tl->str;
         $expr_l = $s;
-        return parse_expr_right($expr_l);
+
+        $op_right = parse_expr_right();
+
+        if (is_null($op_right)) {
+            return $expr_l;
+        }
+
+        return [
+            $op_right[0], # op
+            $expr_l,
+            $op_right[1] # expr_r
+            ];
 
     } else {
         throw not_yet_impl("parse_expr");
