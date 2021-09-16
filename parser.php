@@ -289,56 +289,29 @@ function parse_expr() {
         $pos++;
         $n = $tl->str;
         $expr_l = intval($n);
-
-        $op_right = parse_expr_right();
-
-        if (is_null($op_right)) {
-            return $expr_l;
-        }
-
-        return [
-            $op_right[0], # op
-            $expr_l,
-            $op_right[1] # expr_r
-            ];
-
     } elseif ($tl->kind_eq("ident")) {
         $pos++;
         $s = $tl->str;
         $expr_l = $s;
-
-        $op_right = parse_expr_right();
-
-        if (is_null($op_right)) {
-            return $expr_l;
-        }
-
-        return [
-            $op_right[0], # op
-            $expr_l,
-            $op_right[1] # expr_r
-            ];
-
     } elseif ($tl->kind_eq("sym")) {
         consume_sym("(");
         $expr_l = parse_expr();
         consume_sym(")");
-
-        $op_right = parse_expr_right();
-
-        if (is_null($op_right)) {
-            return $expr_l;
-        }
-
-        return [
-            $op_right[0], # op
-            $expr_l,
-            $op_right[1] # expr_r
-            ];
-
     } else {
         throw not_yet_impl("parse_expr");
     }
+
+    $op_right = parse_expr_right();
+
+    if (is_null($op_right)) {
+        return $expr_l;
+    }
+
+    return [
+        $op_right[0], # op
+        $expr_l,
+        $op_right[1] # expr_r
+        ];
 }
 
 function parse_set() {
