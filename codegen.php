@@ -217,12 +217,6 @@ function gen_return($lvar_names, $stmt_rest) {
     gen_expr([], $lvar_names, $retval);
 }
 
-function gen_vm_comment($cmt) {
-    $cmt = preg_replace("/ /", "~", $cmt);
-
-    printf("  _cmt %s\n", $cmt);
-}
-
 function gen_while($fn_arg_names, $lvar_names, $stmt_rest) {
     puts_fn("gen_while");
 
@@ -297,6 +291,12 @@ function gen_case($fn_arg_names, $lvar_names, $when_clauses) {
     printf("label end_case_%d\n", $label_id);
     printf("  # <<-- case_%d\n", $label_id);
     printf("\n");
+}
+
+function gen_vm_comment($cmt) {
+    $cmt = preg_replace("/ /", "~", $cmt);
+
+    printf("  _cmt %s\n", $cmt);
 }
 
 function gen_stmt($fn_arg_names, $lvar_names, $stmt) {
