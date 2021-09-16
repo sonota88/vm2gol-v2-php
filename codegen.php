@@ -303,6 +303,10 @@ function gen_vm_comment($cmt) {
     printf("  _cmt %s\n", $cmt);
 }
 
+function gen_debug($cmt) {
+    puts("  _debug");
+}
+
 function gen_stmt($fn_arg_names, $lvar_names, $stmt) {
     puts_fn("gen_stmt");
 
@@ -316,6 +320,7 @@ function gen_stmt($fn_arg_names, $lvar_names, $stmt) {
     elseif ($stmt_head === "while"   ) { gen_while(     $fn_arg_names, $lvar_names, $stmt_rest); }
     elseif ($stmt_head === "case"    ) { gen_case(      $fn_arg_names, $lvar_names, $stmt_rest); }
     elseif ($stmt_head === "_cmt"    ) { gen_vm_comment($stmt_rest[0]); }
+    elseif ($stmt_head === "_debug"  ) { gen_debug(); }
     else {
         throw new Exception("Unsupported statement (${stmt_head})");
     }

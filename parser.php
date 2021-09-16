@@ -475,6 +475,17 @@ function parse_vm_comment() {
         ];
 }
 
+function parse_debug() {
+    puts_fn("parse_debug");
+
+    consume_kw("_debug");
+    consume_sym("(");
+    consume_sym(")");
+    consume_sym(";");
+
+    return ["_debug"];
+}
+
 function parse_stmt() {
     $t = peek(0);
 
@@ -489,6 +500,7 @@ function parse_stmt() {
     elseif ($t->str_eq("while"   )) { return parse_while();      }
     elseif ($t->str_eq("case"    )) { return parse_case();       }
     elseif ($t->str_eq("_cmt"    )) { return parse_vm_comment(); }
+    elseif ($t->str_eq("_debug"  )) { return parse_debug();      }
     else {
         throw not_yet_impl($t);
     }
