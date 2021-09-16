@@ -1,4 +1,5 @@
 Encoding.default_internal = "utf-8"
+Encoding.default_external = "utf-8"
 
 C_MINUS = "\e[0;31m" # red
 C_PLUS  = "\e[0;32m" # green
