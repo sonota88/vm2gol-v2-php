@@ -33,6 +33,16 @@ class Token {
             && $this->str_eq($str)
             );
     }
+
+    public function get_value() {
+        if ($this->kind_eq("int")) {
+            return intval($this->str);
+        } elseif ($this->kind_eq("ident")) {
+            return $this->str;
+        } else {
+            throw new Exception("Unexpected kind");
+        }
+    }
 }
 
 # --------------------------------
@@ -98,16 +108,9 @@ function parse_arg() {
     # puts_fn("parse_arg");
 
     $t = peek(0);
+    $pos++;
 
-    if ($t->kind_eq("int")) {
-        $pos++;
-        return intval($t->str);
-    } elseif ($t->kind_eq("ident")) {
-        $pos++;
-        return $t->str;
-    } else {
-        throw not_yet_impl($t);
-    }
+    return $t->get_value();
 }
 
 function parse_args() {
@@ -258,12 +261,10 @@ function parse_expr() {
 
     if ($tl->kind_eq("int")) {
         $pos++;
-        $n = $tl->str;
-        $expr_l = intval($n);
+        $expr_l = $tl->get_value();
     } elseif ($tl->kind_eq("ident")) {
         $pos++;
-        $s = $tl->str;
-        $expr_l = $s;
+        $expr_l = $tl->get_value();
     } elseif ($tl->kind_eq("sym")) {
         consume_sym("(");
         $expr_l = parse_expr();
