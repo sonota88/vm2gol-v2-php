@@ -40,6 +40,11 @@ function asm_prologue() {
     puts("  cp sp bp");
 }
 
+function asm_epilogue() {
+    puts("  cp bp sp");
+    puts("  pop bp");
+}
+
 # --------------------------------
 
 function to_fn_arg_disp($names, $name) {
@@ -356,8 +361,7 @@ function gen_func_def($rest) {
         }
     }
 
-    print("  cp bp sp\n");
-    print("  pop bp\n");
+    asm_epilogue();
     print("  ret\n");
 }
 
@@ -381,8 +385,7 @@ function gen_builtin_set_vram() {
 
     puts("  set_vram [bp:2] [bp:3]"); # vram_addr value
 
-    puts("  cp bp sp");
-    puts("  pop bp");
+    asm_epilogue();
     puts("  ret");
 }
 
@@ -393,8 +396,7 @@ function gen_builtin_get_vram() {
 
     puts("  get_vram [bp:2] reg_a"); # vram_addr dest
 
-    puts("  cp bp sp");
-    puts("  pop bp");
+    asm_epilogue();
     puts("  ret");
 }
 
