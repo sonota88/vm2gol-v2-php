@@ -35,6 +35,13 @@ function rest($list) {
 
 # --------------------------------
 
+function asm_prologue() {
+    puts("  push bp");
+    puts("  cp sp bp");
+}
+
+# --------------------------------
+
 function to_fn_arg_disp($names, $name) {
     $i = arr_index($names, $name);
     if ($i === -1) {
@@ -336,8 +343,7 @@ function gen_func_def($rest) {
     $lvar_names = [];
 
     print("label ${fn_name}\n");
-    print("  push bp\n");
-    print("  cp sp bp\n");
+    asm_prologue();
 
     foreach ($body as $stmt) {
         $stmt_rest = rest($stmt);
@@ -371,8 +377,7 @@ function gen_top_stmts($top_stmts) {
 function gen_builtin_set_vram() {
     puts("");
     puts("label set_vram");
-    puts("  push bp");
-    puts("  cp sp bp");
+    asm_prologue();
 
     puts("  set_vram [bp:2] [bp:3]"); # vram_addr value
 
@@ -384,8 +389,7 @@ function gen_builtin_set_vram() {
 function gen_builtin_get_vram() {
     puts("");
     puts("label get_vram");
-    puts("  push bp");
-    puts("  cp sp bp");
+    asm_prologue();
 
     puts("  get_vram [bp:2] reg_a"); # vram_addr dest
 
