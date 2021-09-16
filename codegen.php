@@ -53,14 +53,6 @@ function to_lvar_disp($names, $name) {
 
 # --------------------------------
 
-function gen_var($fn_arg_names, $lvar_names, $stmt_rest) {
-    print("  sub_sp 1\n");
-
-    if (count($stmt_rest) == 2) {
-        gen_set($fn_arg_names, $lvar_names, $stmt_rest);
-    }
-}
-
 function gen_expr_add() {
     printf("  pop reg_b\n");
     printf("  pop reg_a\n");
@@ -320,6 +312,14 @@ function gen_stmt($fn_arg_names, $lvar_names, $stmt) {
 function gen_stmts($fn_arg_names, $lvar_names, $stmts) {
     foreach ($stmts as $stmt) {
         gen_stmt($fn_arg_names, $lvar_names, $stmt);
+    }
+}
+
+function gen_var($fn_arg_names, $lvar_names, $stmt_rest) {
+    print("  sub_sp 1\n");
+
+    if (count($stmt_rest) == 2) {
+        gen_set($fn_arg_names, $lvar_names, $stmt_rest);
     }
 }
 
