@@ -2,6 +2,21 @@
 
 require "./lib/utils.php";
 
+function is_kw($str) {
+    return (
+        $str == "func"
+        || $str == "set"
+        || $str == "var"
+        || $str == "call_set"
+        || $str == "call"
+        || $str == "return"
+        || $str == "case"
+        || $str == "while"
+        || $str == "_cmt"
+        || $str == "_debug"
+        );
+}
+
 function puts_token($kind, $str) {
     printf("%s:%s\n", $kind, $str);
 }
@@ -24,10 +39,6 @@ function tokenize($src) {
             $temp = $m[1];
             puts_token("str", $temp);
             $pos += mb_strlen($temp) + 2;
-        } elseif (preg_match("/^(func|set|var|call_set|call|return|case|while|_cmt|_debug)[^a-z_]/", $rest, $m)) {
-            $temp = $m[1];
-            puts_token("kw", $temp);
-            $pos += mb_strlen($temp);
         } elseif (preg_match("/^(-?[0-9]+)/", $rest, $m)) {
             $temp = $m[1];
             puts_token("int", $temp);
@@ -38,7 +49,12 @@ function tokenize($src) {
             $pos += mb_strlen($temp);
         } elseif (preg_match("/^([a-z_][a-z0-9_]*)/", $rest, $m)) {
             $temp = $m[1];
-            puts_token("ident", $temp);
+            if (is_kw($temp)) {
+                $kind = "kw";
+            } else {
+                $kind = "ident";
+            }
+            puts_token($kind, $temp);
             $pos += mb_strlen($temp);
         } else {
             throw new Exception("Unexpected pattern (${rest})");
