@@ -35,12 +35,12 @@ function rest($list) {
 
 # --------------------------------
 
-function to_fn_arg_ref($names, $name) {
+function to_fn_arg_disp($names, $name) {
     $i = arr_index($names, $name);
     if ($i === -1) {
         throw new Exception("fn arg not found");
     }
-    return "[bp:" . ($i + 2) . "]";
+    return $i + 2;
 }
 
 function to_lvar_ref($names, $name) {
@@ -144,8 +144,8 @@ function gen_expr($fn_arg_names, $lvar_names, $expr) {
     } elseif (is_string($expr)) {
         $str = $expr;
         if (0 <= arr_index($fn_arg_names, $str)) {
-            $cp_src = to_fn_arg_ref($fn_arg_names, $str);
-            printf("  cp " . $cp_src . " reg_a\n");
+            $disp = to_fn_arg_disp($fn_arg_names, $str);
+            printf("  cp [bp:%d] reg_a\n", $disp);
         } elseif (0 <= arr_index($lvar_names, $str)) {
             $cp_src = to_lvar_ref($lvar_names, $str);
             printf("  cp " . $cp_src . " reg_a\n");
