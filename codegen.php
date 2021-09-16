@@ -51,6 +51,8 @@ function to_lvar_ref($names, $name) {
     return "[bp:-" . ($i + 1) . "]";
 }
 
+# --------------------------------
+
 function codegen_var($fn_arg_names, $lvar_names, $stmt_rest) {
     print("  sub_sp 1\n");
 
