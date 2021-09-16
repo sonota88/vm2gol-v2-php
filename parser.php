@@ -285,24 +285,6 @@ function parse_expr() {
     $tl = peek(0);
     $expr_l;
 
-    if ($tl->is("sym", "(")) {
-        consume_sym("(");
-        $expr_l = parse_expr();
-        consume_sym(")");
-
-        $op_right = parse_expr_right();
-
-        if (is_null($op_right)) {
-            return $expr_l;
-        }
-
-        return [
-            $op_right[0], # op
-            $expr_l,
-            $op_right[1] # expr_r
-            ];
-    }
-
     if ($tl->kind_eq("int")) {
         $pos++;
         $n = $tl->str;
@@ -324,6 +306,23 @@ function parse_expr() {
         $pos++;
         $s = $tl->str;
         $expr_l = $s;
+
+        $op_right = parse_expr_right();
+
+        if (is_null($op_right)) {
+            return $expr_l;
+        }
+
+        return [
+            $op_right[0], # op
+            $expr_l,
+            $op_right[1] # expr_r
+            ];
+
+    } elseif ($tl->kind_eq("sym")) {
+        consume_sym("(");
+        $expr_l = parse_expr();
+        consume_sym(")");
 
         $op_right = parse_expr_right();
 
