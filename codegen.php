@@ -345,10 +345,10 @@ function gen_var($fn_arg_names, $lvar_names, $stmt) {
     }
 }
 
-function gen_func_def($rest) {
-    $fn_name     = $rest[0];
-    $fn_arg_vals = $rest[1];
-    $body        = $rest[2];
+function gen_func_def($func_def) {
+    $fn_name     = $func_def[1];
+    $fn_arg_vals = $func_def[2];
+    $body        = $func_def[3];
 
     $fn_arg_names = [];
     foreach ($fn_arg_vals as $val) {
@@ -381,7 +381,7 @@ function gen_top_stmts($top_stmts) {
         $stmt_rest = rest($top_stmt);
 
         if ($stmt_head === "func") {
-            gen_func_def($stmt_rest);
+            gen_func_def($top_stmt);
         } else {
             throw not_yet_impl("gen_top_stmts");
         }
