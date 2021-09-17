@@ -240,7 +240,7 @@ function parse_expr_right() {
     } elseif ($t->is("sym", "!=")) {
         consume_sym("!=");
         $expr_r = parse_expr();
-        return ["neq", $expr_r];
+        return ["!=", $expr_r];
 
     } else {
         return NULL;
