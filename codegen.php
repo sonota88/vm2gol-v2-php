@@ -315,7 +315,6 @@ function gen_stmt($fn_arg_names, $lvar_names, $stmt) {
     puts_fn("gen_stmt");
 
     $stmt_head = head($stmt);
-    $stmt_rest = rest($stmt);
 
     if     ($stmt_head === "set"     ) { gen_set(       $fn_arg_names, $lvar_names, $stmt); }
     elseif ($stmt_head === "call"    ) { gen_call(      $fn_arg_names, $lvar_names, $stmt); }
