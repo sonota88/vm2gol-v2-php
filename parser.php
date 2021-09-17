@@ -518,11 +518,7 @@ function parse_top_stmt() {
 function parse_top_stmts() {
     $stmts = [];
 
-    while (1) {
-        if (is_end()) {
-            break;
-        }
-
+    while (! is_end()) {
         $stmts[]= parse_top_stmt();
     }
 
