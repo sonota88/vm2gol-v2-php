@@ -376,10 +376,7 @@ function gen_func_def($func_def) {
 
 function gen_top_stmts($top_stmts) {
     foreach ($top_stmts as $top_stmt) {
-        $stmt_head = $top_stmt[0];
-        $stmt_rest = rest($top_stmt);
-
-        if ($stmt_head === "func") {
+        if ($top_stmt[0] === "func") {
             gen_func_def($top_stmt);
         } else {
             throw not_yet_impl("gen_top_stmts");
