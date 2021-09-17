@@ -361,9 +361,8 @@ function gen_func_def($func_def) {
     asm_prologue();
 
     foreach ($body as $stmt) {
-        $stmt_rest = rest($stmt);
         if ($stmt[0] === "var") {
-            $var_name = $stmt_rest[0];
+            $var_name = $stmt[1];
             $lvar_names[]= $var_name;
             gen_var($fn_arg_names, $lvar_names, $stmt);
         } else {
