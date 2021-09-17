@@ -183,11 +183,11 @@ function gen_call($fn_arg_names, $lvar_names, $stmt) {
     _gen_funcall($fn_arg_names, $lvar_names, $funcall);
 }
 
-function gen_call_set($fn_arg_names, $lvar_names, $stmt_rest) {
+function gen_call_set($fn_arg_names, $lvar_names, $stmt) {
     puts_fn("gen_call_set");
 
-    $lvar_name = $stmt_rest[0];
-    $funcall   = $stmt_rest[1];
+    $lvar_name = $stmt[1];
+    $funcall   = $stmt[2];
 
     _gen_funcall($fn_arg_names, $lvar_names, $funcall);
 
@@ -317,7 +317,7 @@ function gen_stmt($fn_arg_names, $lvar_names, $stmt) {
 
     if     ($stmt_head === "set"     ) { gen_set(       $fn_arg_names, $lvar_names, $stmt_rest); }
     elseif ($stmt_head === "call"    ) { gen_call(      $fn_arg_names, $lvar_names, $stmt); }
-    elseif ($stmt_head === "call_set") { gen_call_set(  $fn_arg_names, $lvar_names, $stmt_rest); }
+    elseif ($stmt_head === "call_set") { gen_call_set(  $fn_arg_names, $lvar_names, $stmt); }
     elseif ($stmt_head === "return"  ) { gen_return(                   $lvar_names, $stmt_rest); }
     elseif ($stmt_head === "while"   ) { gen_while(     $fn_arg_names, $lvar_names, $stmt_rest); }
     elseif ($stmt_head === "case"    ) { gen_case(      $fn_arg_names, $lvar_names, $stmt_rest); }
