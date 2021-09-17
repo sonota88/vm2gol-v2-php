@@ -329,12 +329,12 @@ function gen_stmts($fn_arg_names, $lvar_names, $stmts) {
     }
 }
 
-function gen_var($fn_arg_names, $lvar_names, $stmt_rest) {
+function gen_var($fn_arg_names, $lvar_names, $stmt) {
     print("  sub_sp 1\n");
 
-    if (count($stmt_rest) == 2) {
-        $dest = $stmt_rest[0];
-        $expr = $stmt_rest[1];
+    if (count($stmt) == 3) {
+        $dest = $stmt[1];
+        $expr = $stmt[2];
         _gen_set($fn_arg_names, $lvar_names, $dest, $expr);
     }
 }
@@ -359,7 +359,7 @@ function gen_func_def($rest) {
         if ($stmt[0] === "var") {
             $var_name = $stmt_rest[0];
             $lvar_names[]= $var_name;
-            gen_var($fn_arg_names, $lvar_names, $stmt_rest);
+            gen_var($fn_arg_names, $lvar_names, $stmt);
         } else {
             gen_stmt($fn_arg_names, $lvar_names, $stmt);
         }
