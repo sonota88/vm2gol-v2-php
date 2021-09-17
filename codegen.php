@@ -178,7 +178,8 @@ function _gen_funcall($fn_arg_names, $lvar_names, $funcall) {
     printf("  add_sp %d\n", count($fn_args));
 }
 
-function gen_call($fn_arg_names, $lvar_names, $funcall) {
+function gen_call($fn_arg_names, $lvar_names, $stmt) {
+    $funcall = rest($stmt);
     _gen_funcall($fn_arg_names, $lvar_names, $funcall);
 }
 
@@ -315,7 +316,7 @@ function gen_stmt($fn_arg_names, $lvar_names, $stmt) {
     $stmt_rest = rest($stmt);
 
     if     ($stmt_head === "set"     ) { gen_set(       $fn_arg_names, $lvar_names, $stmt_rest); }
-    elseif ($stmt_head === "call"    ) { gen_call(      $fn_arg_names, $lvar_names, $stmt_rest); }
+    elseif ($stmt_head === "call"    ) { gen_call(      $fn_arg_names, $lvar_names, $stmt); }
     elseif ($stmt_head === "call_set") { gen_call_set(  $fn_arg_names, $lvar_names, $stmt_rest); }
     elseif ($stmt_head === "return"  ) { gen_return(                   $lvar_names, $stmt_rest); }
     elseif ($stmt_head === "while"   ) { gen_while(     $fn_arg_names, $lvar_names, $stmt_rest); }
