@@ -163,6 +163,21 @@ function gen_expr($fn_arg_names, $lvar_names, $expr) {
     }
 }
 
+function _gen_funcall($fn_arg_names, $lvar_names, $funcall) {
+    $fn_name = head($funcall);
+    $fn_args = rest($funcall);
+
+    foreach (array_reverse($fn_args) as $fn_arg) {
+        gen_expr($fn_arg_names, $lvar_names, $fn_arg);
+        printf("  push reg_a\n");
+    }
+
+    gen_vm_comment("call  $fn_name");
+    printf("  call %s\n", $fn_name);
+
+    printf("  add_sp %d\n", count($fn_args));
+}
+
 function gen_call($fn_arg_names, $lvar_names, $funcall) {
     $fn_name = head($funcall);
     $fn_args = rest($funcall);
