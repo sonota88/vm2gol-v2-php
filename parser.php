@@ -148,11 +148,8 @@ function parse_func() {
     consume_sym("{");
 
     $stmts = [];
-    while (1) {
+    while (peek(0)->str != "}") {
         $t = peek(0);
-        if ($t->str === "}") {
-            break;
-        }
 
         if ($t->str === "var") {
             $stmts[]= parse_var();
