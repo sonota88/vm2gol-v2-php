@@ -179,18 +179,7 @@ function _gen_funcall($fn_arg_names, $lvar_names, $funcall) {
 }
 
 function gen_call($fn_arg_names, $lvar_names, $funcall) {
-    $fn_name = head($funcall);
-    $fn_args = rest($funcall);
-
-    foreach (array_reverse($fn_args) as $fn_arg) {
-        gen_expr($fn_arg_names, $lvar_names, $fn_arg);
-        printf("  push reg_a\n");
-    }
-
-    gen_vm_comment("call  $fn_name");
-    printf("  call %s\n", $fn_name);
-
-    printf("  add_sp %d\n", count($fn_args));
+    _gen_funcall($fn_arg_names, $lvar_names, $funcall);
 }
 
 function gen_call_set($fn_arg_names, $lvar_names, $stmt_rest) {
@@ -199,7 +188,7 @@ function gen_call_set($fn_arg_names, $lvar_names, $stmt_rest) {
     $lvar_name = $stmt_rest[0];
     $funcall   = $stmt_rest[1];
 
-    gen_call($fn_arg_names, $lvar_names, $funcall);
+    _gen_funcall($fn_arg_names, $lvar_names, $funcall);
 
     $disp = to_lvar_disp($lvar_names, $lvar_name);
     printf("  cp reg_a [bp:%d]\n", $disp);
