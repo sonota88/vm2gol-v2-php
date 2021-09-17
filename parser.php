@@ -149,9 +149,7 @@ function parse_func() {
 
     $stmts = [];
     while (peek(0)->str != "}") {
-        $t = peek(0);
-
-        if ($t->str === "var") {
+        if (peek(0)->str === "var") {
             $stmts[]= parse_var();
         } else {
             $stmts[]= parse_stmt();
@@ -433,8 +431,7 @@ function parse_case() {
     $when_clauses = [];
 
     while (peek(0)->str != "}") {
-        $when_clause = parse_when_clause();
-        $when_clauses[]= $when_clause;
+        $when_clauses[]= parse_when_clause();
     }
 
     consume_sym("}");
@@ -498,8 +495,7 @@ function parse_stmts() {
     $stmts = [];
 
     while (peek(0)->str != "}") {
-        $stmt = parse_stmt();
-        $stmts[]= $stmt;
+        $stmts[]= parse_stmt();
     }
 
     return $stmts;
