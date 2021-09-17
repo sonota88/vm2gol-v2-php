@@ -406,9 +406,6 @@ function parse_when_clause() {
     # puts_fn("parse_when_clause");
 
     $t = peek(0);
-    if ($t->is("sym", "}")) {
-        return 0;
-    }
 
     consume_sym("(");
     $expr = parse_expr();
@@ -435,11 +432,8 @@ function parse_case() {
 
     $when_clauses = [];
 
-    while (1) {
+    while (peek(0)->str != "}") {
         $when_clause = parse_when_clause();
-        if (! $when_clause) {
-            break;
-        }
         $when_clauses[]= $when_clause;
     }
 
