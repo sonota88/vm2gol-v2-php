@@ -190,6 +190,26 @@ function gen_call_set($fn_arg_names, $lvar_names, $stmt_rest) {
     printf("  cp reg_a [bp:%d]\n", $disp);
 }
 
+function _gen_set($fn_arg_names, $lvar_names, $dest, $expr) {
+    gen_expr($fn_arg_names, $lvar_names, $expr);
+    $arg_src = "reg_a";
+
+    if (is_int($dest)) {
+        $arg_dest = $dest;
+        printf("  cp ${arg_src} ${arg_dest}\n");
+    } elseif (is_string($dest)) {
+        $str = $dest;
+        if (0 <= arr_index($lvar_names, $str)) {
+            $disp = to_lvar_disp($lvar_names, $str);
+            printf("  cp ${arg_src} [bp:%d]\n", $disp);
+        } else {
+            throw not_yet_impl($dest);
+        }
+    } else {
+        throw not_yet_impl($dest);
+    }
+}
+
 function gen_set($fn_arg_names, $lvar_names, $rest) {
     puts_fn("gen_set");
 
