@@ -481,10 +481,6 @@ function parse_debug() {
 function parse_stmt() {
     $t = peek(0);
 
-    if ($t->is("sym", "}")) {
-        return -1;
-    }
-
     if     ($t->str_eq("set"     )) { return parse_set();        }
     elseif ($t->str_eq("call"    )) { return parse_call();       }
     elseif ($t->str_eq("call_set")) { return parse_call_set();   }
@@ -501,11 +497,8 @@ function parse_stmt() {
 function parse_stmts() {
     $stmts = [];
 
-    while (! is_end()) {
+    while (peek(0)->str != "}") {
         $stmt = parse_stmt();
-        if ($stmt === -1) {
-            break;
-        }
         $stmts[]= $stmt;
     }
 
