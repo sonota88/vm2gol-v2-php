@@ -238,11 +238,11 @@ function gen_while($fn_arg_names, $lvar_names, $stmt_rest) {
 
     gen_expr($fn_arg_names, $lvar_names, $cond_expr);
 
-    printf("  cp 1 reg_b\n");
+    printf("  cp 0 reg_b\n");
     printf("  compare\n");
 
-    printf("  jump_eq %s\n", $label_true);
-    printf("  jump %s\n", $label_end);
+    printf("  jump_eq %s\n", $label_end);
+    printf("  jump %s\n", $label_true);
     printf("label %s\n", $label_true);
 
     gen_stmts($fn_arg_names, $lvar_names, $body);
