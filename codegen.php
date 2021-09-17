@@ -257,7 +257,6 @@ function gen_case($fn_arg_names, $lvar_names, $when_clauses) {
     $when_idx = -1;
 
     $label_end = "end_case_${label_id}";
-    $label_when_head = "when_${label_id}";
     $label_end_when_head = "end_when_${label_id}";
 
     printf("\n");
@@ -279,9 +278,6 @@ function gen_case($fn_arg_names, $lvar_names, $when_clauses) {
 
         printf("  compare\n");
         printf("  jump_eq %s_%d\n", $label_end_when_head, $when_idx);
-        printf("  jump %s_%d\n", $label_when_head, $when_idx);
-
-        printf("label %s_%d\n", $label_when_head, $when_idx);
 
         gen_stmts($fn_arg_names, $lvar_names, $rest);
 
