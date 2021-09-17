@@ -323,7 +323,7 @@ function gen_stmt($fn_arg_names, $lvar_names, $stmt) {
     elseif ($stmt_head === "return"  ) { gen_return(                   $lvar_names, $stmt); }
     elseif ($stmt_head === "while"   ) { gen_while(     $fn_arg_names, $lvar_names, $stmt); }
     elseif ($stmt_head === "case"    ) { gen_case(      $fn_arg_names, $lvar_names, $stmt); }
-    elseif ($stmt_head === "_cmt"    ) { gen_vm_comment($stmt_rest[0]); }
+    elseif ($stmt_head === "_cmt"    ) { gen_vm_comment($stmt[1]); }
     elseif ($stmt_head === "_debug"  ) { gen_debug(); }
     else {
         throw new Exception("Unsupported statement (${stmt_head})");
