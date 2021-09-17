@@ -216,23 +216,7 @@ function gen_set($fn_arg_names, $lvar_names, $rest) {
     $dest = $rest[0];
     $expr = $rest[1];
 
-    gen_expr($fn_arg_names, $lvar_names, $expr);
-    $arg_src = "reg_a";
-
-    if (is_int($dest)) {
-        $arg_dest = $dest;
-        printf("  cp ${arg_src} ${arg_dest}\n");
-    } elseif (is_string($dest)) {
-        $str = $dest;
-        if (0 <= arr_index($lvar_names, $str)) {
-            $disp = to_lvar_disp($lvar_names, $str);
-            printf("  cp ${arg_src} [bp:%d]\n", $disp);
-        } else {
-            throw not_yet_impl($dest);
-        }
-    } else {
-        throw not_yet_impl($dest);
-    }
+    _gen_set($fn_arg_names, $lvar_names, $dest, $expr);
 }
 
 function gen_return($lvar_names, $stmt_rest) {
@@ -349,7 +333,9 @@ function gen_var($fn_arg_names, $lvar_names, $stmt_rest) {
     print("  sub_sp 1\n");
 
     if (count($stmt_rest) == 2) {
-        gen_set($fn_arg_names, $lvar_names, $stmt_rest);
+        $dest = $stmt_rest[0];
+        $expr = $stmt_rest[1];
+        _gen_set($fn_arg_names, $lvar_names, $dest, $expr);
     }
 }
 
