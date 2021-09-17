@@ -163,9 +163,9 @@ function gen_expr($fn_arg_names, $lvar_names, $expr) {
     }
 }
 
-function gen_call($fn_arg_names, $lvar_names, $stmt_rest) {
-    $fn_name = head($stmt_rest);
-    $fn_args = rest($stmt_rest);
+function gen_call($fn_arg_names, $lvar_names, $funcall) {
+    $fn_name = head($funcall);
+    $fn_args = rest($funcall);
 
     foreach (array_reverse($fn_args) as $fn_arg) {
         gen_expr($fn_arg_names, $lvar_names, $fn_arg);
