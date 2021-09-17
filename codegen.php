@@ -374,7 +374,9 @@ function gen_func_def($func_def) {
     print("  ret\n");
 }
 
-function gen_top_stmts($top_stmts) {
+function gen_top_stmts($ast) {
+    $top_stmts = rest($ast);
+
     foreach ($top_stmts as $top_stmt) {
         if ($top_stmt[0] === "func") {
             gen_func_def($top_stmt);
@@ -410,9 +412,7 @@ function codegen($ast) {
     print("  call main\n");
     print("  exit\n");
     
-    $top_stmts = rest($ast);
-
-    gen_top_stmts($top_stmts);
+    gen_top_stmts($ast);
 
     puts("#>builtins");
     gen_builtin_set_vram();
