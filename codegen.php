@@ -230,11 +230,11 @@ function gen_return($lvar_names, $stmt) {
     gen_expr([], $lvar_names, $retval);
 }
 
-function gen_while($fn_arg_names, $lvar_names, $stmt_rest) {
+function gen_while($fn_arg_names, $lvar_names, $stmt) {
     puts_fn("gen_while");
 
-    $cond_expr = $stmt_rest[0];
-    $body      = $stmt_rest[1];
+    $cond_expr = $stmt[1];
+    $body      = $stmt[2];
 
     $label_id = get_label_id();
     $label_begin = "while_$label_id";
@@ -321,7 +321,7 @@ function gen_stmt($fn_arg_names, $lvar_names, $stmt) {
     elseif ($stmt_head === "call"    ) { gen_call(      $fn_arg_names, $lvar_names, $stmt); }
     elseif ($stmt_head === "call_set") { gen_call_set(  $fn_arg_names, $lvar_names, $stmt); }
     elseif ($stmt_head === "return"  ) { gen_return(                   $lvar_names, $stmt); }
-    elseif ($stmt_head === "while"   ) { gen_while(     $fn_arg_names, $lvar_names, $stmt_rest); }
+    elseif ($stmt_head === "while"   ) { gen_while(     $fn_arg_names, $lvar_names, $stmt); }
     elseif ($stmt_head === "case"    ) { gen_case(      $fn_arg_names, $lvar_names, $stmt); }
     elseif ($stmt_head === "_cmt"    ) { gen_vm_comment($stmt_rest[0]); }
     elseif ($stmt_head === "_debug"  ) { gen_debug(); }
