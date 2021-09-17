@@ -230,7 +230,6 @@ function gen_while($fn_arg_names, $lvar_names, $stmt_rest) {
     $label_id = get_label_id();
     $label_begin = "while_$label_id";
     $label_end = "end_while_$label_id";
-    $label_true = "true_$label_id";
 
     printf("\n");
 
@@ -242,8 +241,6 @@ function gen_while($fn_arg_names, $lvar_names, $stmt_rest) {
     printf("  compare\n");
 
     printf("  jump_eq %s\n", $label_end);
-    printf("  jump %s\n", $label_true);
-    printf("label %s\n", $label_true);
 
     gen_stmts($fn_arg_names, $lvar_names, $body);
 
