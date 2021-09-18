@@ -222,26 +222,16 @@ function parse_expr_right() {
 
     $t = peek(0);
 
-    if ($t->is("sym", "+")) {
-        consume_sym("+");
+    if (
+        $t->is("sym", "+")
+        || $t->is("sym", "*")
+        || $t->is("sym", "==")
+        || $t->is("sym", "!=")
+    ) {
+        $op = $t->str;
+        consume_sym($op);
         $expr_r = parse_expr();
-        return ["+", $expr_r];
-
-    } elseif ($t->is("sym", "*")) {
-        consume_sym("*");
-        $expr_r = parse_expr();
-        return ["*", $expr_r];
-
-    } elseif ($t->is("sym", "==")) {
-        consume_sym("==");
-        $expr_r = parse_expr();
-        return ["==", $expr_r];
-
-    } elseif ($t->is("sym", "!=")) {
-        consume_sym("!=");
-        $expr_r = parse_expr();
-        return ["!=", $expr_r];
-
+        return [$op, $expr_r];
     } else {
         return NULL;
     }
