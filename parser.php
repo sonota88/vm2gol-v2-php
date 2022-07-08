@@ -237,6 +237,28 @@ function parse_expr_right() {
     }
 }
 
+function _parse_expr_factor() {
+    global $pos;
+    puts_fn("_parse_expr_factor");
+
+    $t = peek(0);
+
+    if ($t->kind_eq("sym")) {
+        consume_sym("(");
+        $expr = parse_expr();
+        consume_sym(")");
+        return $expr;
+    } elseif ($t->kind_eq("int")) {
+        $pos++;
+        return $t->get_value();
+    } elseif ($t->kind_eq("ident")) {
+        $pos++;
+        return $t->get_value();
+    } else {
+        throw not_yet_impl("_parse_expr_factor");
+    }
+}
+
 function parse_expr() {
     global $pos;
     puts_fn("parse_expr");
