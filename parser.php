@@ -542,8 +542,8 @@ function parse() {
 # --------------------------------
 
 while ($line = fgets(STDIN)) {
-    preg_match("/^\[\d+, *\"(.+?)\", *\"(.+)\"/", $line, $m); # TODO
-    $tokens[]= new Token($m[1], $m[2]);
+    $parts = json_parse($line);
+    $tokens[]= new Token($parts[1], $parts[2]);
 }
 
 $ast = parse();
