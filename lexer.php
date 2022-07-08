@@ -18,7 +18,7 @@ function is_kw($str) {
 }
 
 function puts_token($kind, $str) {
-    printf("%s:%s\n", $kind, $str);
+    printf("[1, \"%s\", \"%s\"]\n", $kind, $str); # TODO
 }
 
 function tokenize($src) {

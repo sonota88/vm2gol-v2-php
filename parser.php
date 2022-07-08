@@ -542,7 +542,7 @@ function parse() {
 # --------------------------------
 
 while ($line = fgets(STDIN)) {
-    preg_match("/^(.+?):(.+)$/", $line, $m);
+    preg_match("/^\[\d+, *\"(.+?)\", *\"(.+)\"/", $line, $m); # TODO
     $tokens[]= new Token($m[1], $m[2]);
 }
 
