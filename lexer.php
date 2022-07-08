@@ -19,10 +19,7 @@ function is_kw($str) {
 }
 
 function puts_token($lineno, $kind, $str) {
-    $token = [];
-    $token[]= $lineno;
-    $token[]= $kind;
-    $token[]= $str;
+    $token = [$lineno, $kind, $str];
     json_print_oneline($token);
     print("\n");
 }
