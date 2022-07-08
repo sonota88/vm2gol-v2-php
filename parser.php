@@ -237,38 +237,52 @@ function parse_expr_right() {
     }
 }
 
+function _parse_expr_factor() {
+    global $pos;
+    puts_fn("_parse_expr_factor");
+
+    $t = peek(0);
+
+    if ($t->kind_eq("sym")) {
+        consume_sym("(");
+        $expr = parse_expr();
+        consume_sym(")");
+        return $expr;
+    } elseif ($t->kind_eq("int")) {
+        $pos++;
+        return $t->get_value();
+    } elseif ($t->kind_eq("ident")) {
+        $pos++;
+        return $t->get_value();
+    } else {
+        throw not_yet_impl("_parse_expr_factor");
+    }
+}
+
+function is_binary_op($t) {
+    $v = $t->str;
+    return (
+        $v == "+"
+        || $v == "*"
+        || $v == "=="
+        || $v == "!="
+        );
+}
+
 function parse_expr() {
     global $pos;
     puts_fn("parse_expr");
 
-    $tl = peek(0);
-    $expr_l;
+    $expr = _parse_expr_factor();
 
-    if ($tl->kind_eq("int")) {
+    while (is_binary_op(peek(0))) {
+        $op = peek(0)->str;
         $pos++;
-        $expr_l = $tl->get_value();
-    } elseif ($tl->kind_eq("ident")) {
-        $pos++;
-        $expr_l = $tl->get_value();
-    } elseif ($tl->kind_eq("sym")) {
-        consume_sym("(");
-        $expr_l = parse_expr();
-        consume_sym(")");
-    } else {
-        throw not_yet_impl("parse_expr");
+
+        $expr_r = _parse_expr_factor();
+        $expr = [$op, $expr, $expr_r];
     }
-
-    $op_right = parse_expr_right();
-
-    if (is_null($op_right)) {
-        return $expr_l;
-    }
-
-    return [
-        $op_right[0], # op
-        $expr_l,
-        $op_right[1] # expr_r
-        ];
+    return $expr;
 }
 
 function parse_set() {
