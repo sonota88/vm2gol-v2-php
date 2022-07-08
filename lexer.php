@@ -1,6 +1,7 @@
 <?php
 
 require "./lib/utils.php";
+require "./lib/json.php";
 
 function is_kw($str) {
     return (
@@ -18,7 +19,13 @@ function is_kw($str) {
 }
 
 function puts_token($kind, $str) {
-    printf("[1, \"%s\", \"%s\"]\n", $kind, $str); # TODO
+    $lineno = 1; # TODO
+    $token = [];
+    $token[]= $lineno;
+    $token[]= $kind;
+    $token[]= $str;
+    json_print_oneline($token);
+    print("\n");
 }
 
 function tokenize($src) {
