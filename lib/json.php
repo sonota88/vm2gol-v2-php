@@ -43,8 +43,8 @@ function print_indent ($lv) {
     }
 }
 
-function _json_print ($tree, $lv) {
-    print_indent($lv);
+function _json_print ($tree, $lv, $pretty) {
+    if ($pretty) { print_indent($lv); }
     print("[");
 
     for ($i = 0; $i < count($tree); $i++) {
@@ -52,28 +52,35 @@ function _json_print ($tree, $lv) {
 
         if ($i >= 1) {
             print(",");
+            if (! $pretty) {
+                print(" ");
+            }
         }
-        print("\n");
+        if ($pretty) { print("\n"); }
 
         if (is_array($el)) {
-            _json_print($el, $lv + 1);
+            _json_print($el, $lv + 1, $pretty);
         } elseif (is_int($el)) {
-            print_indent($lv + 1);
+            if ($pretty) { print_indent($lv + 1); }
             print($el);
         } elseif (is_string($el)) {
-            print_indent($lv + 1);
+            if ($pretty) { print_indent($lv + 1); }
             print('"' . $el . '"');
         } else {
             die;
         }
     }
-    print("\n");
+    if ($pretty) { print("\n"); }
 
     print_indent($lv);
     print("]");
 }
 
 function json_print ($tree) {
-    _json_print($tree, 0);
+    _json_print($tree, 0, true);
     print("\n");
+}
+
+function json_print_oneline ($tree) {
+    _json_print($tree, 0, false);
 }
