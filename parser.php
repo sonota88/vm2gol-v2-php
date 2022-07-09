@@ -279,8 +279,8 @@ function parse_expr() {
         $op = peek(0)->str;
         $pos++;
 
-        $expr_r = _parse_expr_factor();
-        $expr = [$op, $expr, $expr_r];
+        $factor = _parse_expr_factor();
+        $expr = [$op, $expr, $factor];
     }
     return $expr;
 }
