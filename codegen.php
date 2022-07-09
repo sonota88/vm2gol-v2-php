@@ -230,7 +230,7 @@ function gen_while($fn_arg_names, $lvar_names, $stmt) {
     puts_fn("gen_while");
 
     $cond_expr = $stmt[1];
-    $body      = $stmt[2];
+    $stmts     = $stmt[2];
 
     $label_id = get_label_id();
     $label_begin = "while_$label_id";
@@ -247,7 +247,7 @@ function gen_while($fn_arg_names, $lvar_names, $stmt) {
 
     printf("  jump_eq %s\n", $label_end);
 
-    gen_stmts($fn_arg_names, $lvar_names, $body);
+    gen_stmts($fn_arg_names, $lvar_names, $stmts);
 
     printf("  jump %s\n", $label_begin);
 
@@ -273,7 +273,7 @@ function gen_case($fn_arg_names, $lvar_names, $stmt) {
         $when_idx++;
 
         $cond = head($when_clause);
-        $rest = rest($when_clause);
+        $stmts = rest($when_clause);
 
         printf("  # when_%d_%d\n", $label_id, $when_idx);
 
@@ -286,7 +286,7 @@ function gen_case($fn_arg_names, $lvar_names, $stmt) {
         printf("  compare\n");
         printf("  jump_eq %s_%d\n", $label_end_when_head, $when_idx);
 
-        gen_stmts($fn_arg_names, $lvar_names, $rest);
+        gen_stmts($fn_arg_names, $lvar_names, $stmts);
 
         printf("  jump %s\n", $label_end);
         printf("label %s_%d\n", $label_end_when_head, $when_idx);
@@ -344,7 +344,7 @@ function gen_var($fn_arg_names, $lvar_names, $stmt) {
 function gen_func_def($func_def) {
     $fn_name     = $func_def[1];
     $fn_arg_vals = $func_def[2];
-    $body        = $func_def[3];
+    $stmts       = $func_def[3];
 
     $fn_arg_names = [];
     foreach ($fn_arg_vals as $val) {
@@ -356,7 +356,7 @@ function gen_func_def($func_def) {
     print("label ${fn_name}\n");
     asm_prologue();
 
-    foreach ($body as $stmt) {
+    foreach ($stmts as $stmt) {
         if ($stmt[0] === "var") {
             $var_name = $stmt[1];
             $lvar_names[]= $var_name;
