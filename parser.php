@@ -101,7 +101,7 @@ function consume_sym($str) {
     $pos++;
 }
 
-# # --------------------------------
+# --------------------------------
 
 function parse_arg() {
     global $pos;
