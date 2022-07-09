@@ -12,6 +12,7 @@ function is_kw($str) {
         || $str == "call"
         || $str == "return"
         || $str == "case"
+        || $str == "when"
         || $str == "while"
         || $str == "_cmt"
         || $str == "_debug"

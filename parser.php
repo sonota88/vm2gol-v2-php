@@ -409,6 +409,8 @@ function parse_when_clause() {
 
     $t = peek(0);
 
+    consume_kw("when");
+
     consume_sym("(");
     $expr = parse_expr();
     consume_sym(")");
@@ -430,15 +432,11 @@ function parse_case() {
 
     consume_kw("case");
 
-    consume_sym("{");
-
     $when_clauses = [];
 
-    while (peek(0)->str != "}") {
+    while (peek(0)->str == "when") {
         $when_clauses[]= parse_when_clause();
     }
-
-    consume_sym("}");
 
     $list = ["case"];
     foreach ($when_clauses as $when_clause) {
