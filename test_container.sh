@@ -9,13 +9,13 @@ print_project_dir() {
 }
 
 export PROJECT_DIR="$(print_project_dir)"
-export TEST_DIR="${PROJECT_DIR}/test"
+export TEST_DIR="${PROJECT_DIR}/test_common"
 export TEMP_DIR="${PROJECT_DIR}/z_tmp"
 
-MAX_ID_JSON=6
-MAX_ID_TOKENIZE=2
+MAX_ID_JSON=8
+MAX_ID_TOKENIZE=3
 MAX_ID_PARSE=2
-MAX_ID_STEP=29
+MAX_ID_STEP=27
 
 ERRS=""
 
@@ -90,7 +90,7 @@ test_json_nn() {
     return
   fi
 
-  ruby test/diff.rb json $exp_tokens_file $temp_json_file
+  ruby ${TEST_DIR}/diff.rb json $exp_tokens_file $temp_json_file
   if [ $? -ne 0 ]; then
     # meld $exp_tokens_file $temp_json_file &
 
@@ -124,7 +124,7 @@ test_tokenize_nn() {
     return
   fi
 
-  ruby test/diff.rb text $exp_tokens_file $temp_tokens_file
+  ruby ${TEST_DIR}/diff.rb text $exp_tokens_file $temp_tokens_file
   if [ $? -ne 0 ]; then
     # meld $exp_tokens_file $temp_tokens_file &
 
@@ -172,7 +172,7 @@ test_parse_nn() {
   fi
 
   if [ "$local_errs" = "" ]; then
-    ruby test/diff.rb json $exp_vgt_file $temp_vgt_file
+    ruby ${TEST_DIR}/diff.rb json $exp_vgt_file $temp_vgt_file
     if [ $? -ne 0 ]; then
       # meld $exp_vgt_file $temp_vga_file &
 
@@ -250,7 +250,7 @@ test_compile_nn() {
   fi
 
   if [ "$local_errs" = "" ]; then
-    ruby test/diff.rb asm $exp_vga_file $temp_vga_file
+    ruby ${TEST_DIR}/diff.rb asm $exp_vga_file $temp_vga_file
     if [ $? -ne 0 ]; then
       # meld $exp_vgt_file $temp_vga_file &
 
