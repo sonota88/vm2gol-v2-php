@@ -217,26 +217,6 @@ function parse_var() {
     }
 }
 
-function parse_expr_right() {
-    puts_fn("parse_expr_right");
-
-    $t = peek(0);
-
-    if (
-        $t->is("sym", "+")
-        || $t->is("sym", "*")
-        || $t->is("sym", "==")
-        || $t->is("sym", "!=")
-    ) {
-        $op = $t->str;
-        consume_sym($op);
-        $expr_r = parse_expr();
-        return [$op, $expr_r];
-    } else {
-        return NULL;
-    }
-}
-
 function _parse_expr_factor() {
     global $pos;
     puts_fn("_parse_expr_factor");
