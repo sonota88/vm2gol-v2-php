@@ -387,8 +387,6 @@ function parse_while() {
 function parse_when_clause() {
     # puts_fn("parse_when_clause");
 
-    $t = peek(0);
-
     consume_kw("when");
 
     consume_sym("(");
