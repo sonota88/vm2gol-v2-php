@@ -129,10 +129,10 @@ function _gen_expr_binary($fn_arg_names, $lvar_names, $expr) {
     gen_expr($fn_arg_names, $lvar_names, $term_r);
     printf("  push reg_a\n");
 
-    if     ($op === "+" ) {gen_expr_add();  }
-    elseif ($op === "*" ) {gen_expr_mult(); }
-    elseif ($op === "==") {gen_expr_eq();   }
-    elseif ($op === "!=") {gen_expr_neq();  }
+    if     ($op === "+" ) { gen_expr_add();  }
+    elseif ($op === "*" ) { gen_expr_mult(); }
+    elseif ($op === "==") { gen_expr_eq();   }
+    elseif ($op === "!=") { gen_expr_neq();  }
     else {
         throw not_yet_impl($op);
     }
